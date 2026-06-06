@@ -85,7 +85,7 @@ export const projects = [
     ],
     link: '',
     github: '',
-    apk: '/projects/Dino/Version_0.3_Prueba_Pts.apk',
+    apk: 'https://drive.google.com/file/d/1pJmCkarRZ0giUA7L-8U7vIruavCPFFw3/view?usp=drive_link',
     year: '2024'
   },
   {
