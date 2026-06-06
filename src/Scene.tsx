@@ -4,7 +4,7 @@ import { useGLTF, Float, Environment, Stars, Sparkles } from '@react-three/drei'
 import * as THREE from 'three';
 
 export function Scene() {
-  const { scene } = useGLTF('/astronaut-optimized.glb');
+  const { scene } = useGLTF('/astronaut.glb') as any;
   const group = useRef<THREE.Group>(null);
 
   // Animación suave de rotación general (sigue al mouse)
