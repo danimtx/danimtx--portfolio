@@ -229,7 +229,7 @@ function ProjectFullScreen({ project, onClose }: { project: any; onClose: () => 
 }
 
 function App() {
-  const scrollRef = useRef<HTMLDivElement>(null);
+
   const [activeProject, setActiveProject] = useState<any | null>(null);
 
   const openProjectDetails = (project: any) => {
