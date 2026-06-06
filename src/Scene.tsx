@@ -55,4 +55,4 @@ export function Scene() {
 }
 
 // Pre-cargar modelo
-useGLTF.preload('/astronaut-optimized.glb');
+useGLTF.preload('/astronaut.glb');
