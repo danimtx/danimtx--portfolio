@@ -7,8 +7,8 @@ import { Scene } from './Scene';
 import { projects, mainCertificates, otherCertificates } from './data';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { FiGithub, FiLinkedin, FiInstagram, FiDownload, FiExternalLink, FiImage, FiX, FiCode } from 'react-icons/fi';
-import { FaReact, FaDocker, FaPython, FaDatabase, FaCode, FaServer, FaGamepad, FaPhp, FaAngular, FaJs, FaHtml5, FaCss3, FaGitAlt, FaFire, FaMobileAlt, FaExternalLinkAlt, FaGithub } from 'react-icons/fa';
+import { FiGithub, FiLinkedin, FiInstagram, FiDownload, FiExternalLink, FiImage, FiX } from 'react-icons/fi';
+import { FaReact, FaDocker, FaPython, FaDatabase, FaCode, FaServer, FaGamepad, FaPhp, FaAngular, FaJs, FaHtml5, FaGitAlt, FaFire, FaMobileAlt, FaExternalLinkAlt, FaGithub } from 'react-icons/fa';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -229,7 +229,7 @@ function ProjectFullScreen({ project, onClose }: { project: any; onClose: () => 
 }
 
 function App() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const [activeProject, setActiveProject] = useState<any | null>(null);
 
   const openProjectDetails = (project: any) => {
