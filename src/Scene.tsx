@@ -4,7 +4,7 @@ import { useGLTF, Float, Environment, Stars, Sparkles } from '@react-three/drei'
 import * as THREE from 'three';
 
 export function Scene() {
-  const { scene } = useGLTF('/astronaut.glb') as any;
+  const { scene } = useGLTF('/astronaut-optimized.glb') as any;
   const group = useRef<THREE.Group>(null);
 
   // Animación suave de rotación general (sigue al mouse)
@@ -55,4 +55,4 @@ export function Scene() {
 }
 
 // Pre-cargar modelo
-useGLTF.preload('/astronaut.glb');
+useGLTF.preload('/astronaut-optimized.glb');
