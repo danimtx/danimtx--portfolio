@@ -1,0 +1,17 @@
+﻿<!doctype html><html><body>
+<canvas id="c" width="400" height="300"></canvas>
+<script type="importmap">{ "imports": { "three": "/node_modules/.vite/deps/three.js" } }</script>
+<script type="module">
+import * as THREE from "three";
+const c = document.getElementById("c");
+const r = new THREE.WebGLRenderer({ canvas: c });
+const s = new THREE.Scene();
+s.background = new THREE.Color(0x001155);
+const cam = new THREE.PerspectiveCamera(50, 400/300, 0.1, 100);
+cam.position.z = 5;
+const m = new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial({ color: 0xff0000 }));
+s.add(m);
+r.render(s, cam);
+window.__done = "rendered";
+</script>
+</body></html>

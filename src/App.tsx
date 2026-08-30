@@ -1,256 +1,128 @@
-import { useEffect, Suspense, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import Lenis from 'lenis';
-import { Canvas } from '@react-three/fiber';
-import { Loader } from '@react-three/drei';
-import { Scene } from './Scene';
-import { projects, mainCertificates, otherCertificates } from './data';
+import CyberMatrixBackground from './components/CyberMatrixBackground';
+import HeroKernelTerminal from './components/HeroKernelTerminal';
+import { setLenis, getScrollPosition, restoreScrollPosition } from './scroll';
+import {
+  mainCertificates,
+  otherCertificates,
+  personalInfo,
+  heroRolesEn,
+  heroRolesEs,
+  getSkillCategories,
+  type Project
+} from './data';
+import { useLanguage } from './i18n/LanguageContext';
+import Typewriter from './Typewriter';
+import ProjectFullScreen from './ProjectFullScreen';
+import SystemsShowcase from './components/SystemsShowcase';
+import ArchitectureSchematic from './components/ArchitectureSchematic';
+import AlgorithmVisualizer from './components/AlgorithmVisualizer';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { FiGithub, FiLinkedin, FiInstagram, FiDownload, FiExternalLink, FiImage, FiX } from 'react-icons/fi';
-import { FaReact, FaDocker, FaPython, FaDatabase, FaCode, FaServer, FaGamepad, FaPhp, FaAngular, FaJs, FaHtml5, FaGitAlt, FaFire, FaMobileAlt, FaExternalLinkAlt, FaGithub } from 'react-icons/fa';
+import {
+  FiGithub,
+  FiLinkedin,
+  FiInstagram,
+  FiDownload,
+  FiExternalLink,
+  FiAward,
+  FiSend
+} from 'react-icons/fi';
+import {
+  FaReact,
+  FaDocker,
+  FaPython,
+  FaDatabase,
+  FaCode,
+  FaServer,
+  FaGamepad,
+  FaAngular,
+  FaHtml5,
+  FaMobileAlt,
+  FaLayerGroup,
+  FaRobot
+} from 'react-icons/fa';
+import { SiDotnet, SiCplusplus, SiTypescript, SiPostgresql, SiN8N } from 'react-icons/si';
+import { sectorSignal, scrollSignal, hoverSignal, type Sector } from './sectorSignal';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const ROLES = [
-  "Full Stack Developer",
-  "Software Engineer",
-  "Backend Architect",
-  "WebGL Creator"
-];
-
-function Typewriter({ words }: { words: string[] }) {
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [currentText, setCurrentText] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  useEffect(() => {
-    const typeSpeed = isDeleting ? 40 : 100;
-    const word = words[currentWordIndex];
-
-    const timeout = setTimeout(() => {
-      if (!isDeleting && currentText === word) {
-        setTimeout(() => setIsDeleting(true), 2000);
-      } else if (isDeleting && currentText === '') {
-        setIsDeleting(false);
-        setCurrentWordIndex((prev) => (prev + 1) % words.length);
-      } else {
-        setCurrentText(word.substring(0, currentText.length + (isDeleting ? -1 : 1)));
-      }
-    }, typeSpeed);
-
-    return () => clearTimeout(timeout);
-  }, [currentText, isDeleting, currentWordIndex, words]);
-
-  return (
-    <span style={{ color: '#bf00ff', fontWeight: 600 }}>
-      {currentText}
-      <span className="blink-cursor" style={{ borderRight: '2px solid #bf00ff', animation: 'blink 0.7s infinite' }}></span>
-    </span>
-  );
-}
-
-function ProjectFullScreen({ project, onClose }: { project: any; onClose: () => void }) {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const heroImgRef = useRef<HTMLImageElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  // Lock scroll when lightbox is open
-  useEffect(() => {
-    if (selectedImage) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
-    return () => { document.body.style.overflow = 'auto'; };
-  }, [selectedImage]);
-
-  useEffect(() => {
-    window.scrollTo(0, 0); 
-    document.body.style.overflow = 'auto'; 
-    
-    // Premium Entrance Animation
-    if (containerRef.current && heroImgRef.current && contentRef.current) {
-      const tl = gsap.timeline();
-      
-      // Animate container in (fade + slight slide up)
-      tl.fromTo(containerRef.current, 
-        { opacity: 0, y: 50 }, 
-        { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", clearProps: "transform" }
-      );
-      
-      // Animate hero image scale (Ken Burns style reveal)
-      tl.fromTo(heroImgRef.current,
-        { scale: 1.1 },
-        { scale: 1, duration: 1.5, ease: "power2.out" },
-        "-=0.6"
-      );
-      
-      // Stagger animate content elements
-      const elements = contentRef.current.querySelectorAll('.animate-up');
-      tl.fromTo(elements,
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.5, stagger: 0.1, ease: "back.out(1.2)" },
-        "-=1.0"
-      );
-    }
-    
-    return () => {};
-  }, []);
-
-  return (
-    <div ref={containerRef} className="project-fullscreen" style={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '100vh', background: '#030305', zIndex: 100 }}>
-      {/* Hero Header */}
-      <div style={{ position: 'relative', width: '100%', height: '65vh', overflow: 'hidden' }}>
-        <img 
-          ref={heroImgRef}
-          src={project.gallery && project.gallery[0] ? project.gallery[0] : project.image} 
-          alt={project.title} 
-          style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5, transformOrigin: 'center' }}
-        />
-        {/* Advanced Gradient Overlay */}
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(3,3,5,0.1) 0%, rgba(3,3,5,0.8) 70%, #030305 100%)' }} />
-        
-        {/* Content over hero */}
-        <div ref={contentRef} style={{ position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)', padding: '2rem 0', width: '90%', maxWidth: '1200px' }}>
-          <button 
-            onClick={onClose} 
-            className="premium-back-btn animate-up" 
-            style={{ marginBottom: '2rem' }}
-          >
-            <span className="back-icon">←</span>
-            VOLVER
-          </button>
-          
-          <h1 className="animate-up" style={{ fontFamily: '"Orbitron", sans-serif', fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', color: '#fff', marginBottom: '1rem', fontWeight: 700, lineHeight: 1.1, letterSpacing: '-1px' }}>
-            {project.title}
-          </h1>
-          
-          <div className="animate-up" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.8rem', marginBottom: '1rem' }}>
-            {project.tech.map((t: string) => (
-              <span key={t} style={{ fontFamily: '"JetBrains Mono", monospace', padding: '0.3rem 0.8rem', background: 'transparent', borderRadius: '4px', fontSize: '0.85rem', color: '#e0e0e0', border: '1px solid rgba(255,255,255,0.15)', textTransform: 'uppercase' }}>
-                {t}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '4rem 5%', color: '#e0e0e0' }}>
-        {/* Acciones (Links) */}
-        <div style={{ display: 'flex', gap: '1rem', marginBottom: '4rem', flexWrap: 'wrap', paddingBottom: '3rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-          {project.github && (
-            <a href={project.github} target="_blank" rel="noreferrer" className="premium-action-btn light">
-              <FaGithub size={16} /> VER CÓDIGO
-            </a>
-          )}
-          {project.link && (
-            <a href={project.link} target="_blank" rel="noreferrer" className="premium-action-btn accent">
-              <FaExternalLinkAlt size={16} /> VISITAR WEB
-            </a>
-          )}
-          {project.apk && (
-            <a href={project.apk} download target="_blank" rel="noreferrer" className="premium-action-btn accent">
-              <FiDownload size={16} /> DESCARGAR APK
-            </a>
-          )}
-          {!project.link && !project.github && !project.apk && (
-             <span style={{ color: '#888', fontSize: '1rem', fontStyle: 'italic', display: 'flex', alignItems: 'center', height: '100%', fontFamily: '"JetBrains Mono", monospace' }}>
-               * Código fuente privado / Offline
-             </span>
-          )}
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '5rem' }}>
-          {/* Descripción */}
-          <section>
-            <h2 style={{ fontFamily: '"Orbitron", sans-serif', fontSize: '2.5rem', color: '#fff', marginBottom: '2rem', fontWeight: 700 }}>
-              <span style={{ color: 'var(--accent-main)' }}>//</span> Descripción General
-            </h2>
-            <p style={{ fontSize: '1.25rem', lineHeight: 1.9, color: '#a0a0b0', whiteSpace: 'pre-line' }}>
-              {project.description}
-            </p>
-          </section>
-
-          {/* Galería Premium */}
-          {project.gallery && project.gallery.length > 1 && (
-            <section>
-              <h2 style={{ fontFamily: '"Orbitron", sans-serif', fontSize: '2.5rem', color: '#fff', marginBottom: '2rem', fontWeight: 700 }}>
-                <span style={{ color: 'var(--accent-main)' }}>//</span> Galería del Proyecto
-              </h2>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2rem' }}>
-                {project.gallery.slice(1).map((img: string, i: number) => (
-                  <div key={i} className="gallery-item" style={{ position: 'relative', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', aspectRatio: '16/9', background: '#111', cursor: 'zoom-in' }}
-                       onClick={() => setSelectedImage(img)}
-                       onMouseEnter={(e) => {
-                         gsap.to(e.currentTarget.querySelector('img'), { scale: 1.05, duration: 0.4, ease: 'power2.out' });
-                         gsap.to(e.currentTarget.querySelector('.overlay'), { opacity: 0, duration: 0.3 });
-                       }}
-                       onMouseLeave={(e) => {
-                         gsap.to(e.currentTarget.querySelector('img'), { scale: 1, duration: 0.4, ease: 'power2.out' });
-                         gsap.to(e.currentTarget.querySelector('.overlay'), { opacity: 1, duration: 0.3 });
-                       }}
-                  >
-                    <img src={img} alt={`Screenshot ${i + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }} />
-                    <div className="overlay" style={{ position: 'absolute', inset: 0, background: 'rgba(3,3,5,0.2)', transition: 'opacity 0.3s', pointerEvents: 'none' }} />
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-        </div>
-      </div>
-
-      {/* Lightbox Modal (Estatico y Completo) */}
-      {selectedImage && createPortal(
-        <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 99999, background: 'rgba(0,0,0,0.95)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          {/* Botón X gigante */}
-          <button 
-            onClick={() => setSelectedImage(null)}
-            style={{ position: 'absolute', top: '20px', right: '30px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.3)', color: '#fff', cursor: 'pointer', width: '50px', height: '50px', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 100000, transition: 'background 0.2s' }} 
-            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.3)'} 
-            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-          >
-            <FiX size={30} />
-          </button>
-          
-          <img 
-            src={selectedImage} 
-            alt="Preview Estática" 
-            style={{ maxWidth: '95vw', maxHeight: '95vh', objectFit: 'contain', display: 'block', margin: 'auto' }} 
-          />
-        </div>,
-        document.body
-      )}
-    </div>
-  );
+// Render icon helper according to skill iconKey
+function renderSkillIcon(iconKey: string) {
+  switch (iconKey) {
+    case 'csharp': return <SiDotnet className="tech-icon" />;
+    case 'server': return <FaServer className="tech-icon" />;
+    case 'architecture': return <FaLayerGroup className="tech-icon" />;
+    case 'python': return <FaPython className="tech-icon" />;
+    case 'cpp': return <SiCplusplus className="tech-icon" />;
+    case 'node': return <FaServer className="tech-icon" />;
+    case 'react': return <FaReact className="tech-icon" />;
+    case 'mobile': return <FaMobileAlt className="tech-icon" />;
+    case 'angular': return <FaAngular className="tech-icon" />;
+    case 'ts': return <SiTypescript className="tech-icon" />;
+    case 'webgl': return <FaGamepad className="tech-icon" />;
+    case 'css': return <FaHtml5 className="tech-icon" />;
+    case 'ai': return <FaRobot className="tech-icon" />;
+    case 'workflow': return <SiN8N className="tech-icon" />;
+    case 'postgres': return <SiPostgresql className="tech-icon" />;
+    case 'sql': return <FaDatabase className="tech-icon" />;
+    case 'docker': return <FaDocker className="tech-icon" />;
+    case 'unity': return <FaGamepad className="tech-icon" />;
+    default: return <FaCode className="tech-icon" />;
+  }
 }
 
 function App() {
+  const { lang, setLang, t } = useLanguage();
+  const [activeProject, setActiveProject] = useState<Project | null>(null);
+  const savedScrollRef = useRef(0);
+  const prevActiveRef = useRef<Project | null>(null);
 
-  const [activeProject, setActiveProject] = useState<any | null>(null);
+  const heroRoles = useMemo(() => lang === 'en' ? heroRolesEn : heroRolesEs, [lang]);
+  const skillCategories = useMemo(() => getSkillCategories(lang), [lang]);
+  const activeWhatsappLink = lang === 'en' ? personalInfo.whatsappLink : personalInfo.whatsappLinkEs;
 
-  const openProjectDetails = (project: any) => {
+  // Al cerrar el overlay, restaurar la posición de scroll previa
+  useEffect(() => {
+    if (prevActiveRef.current && !activeProject) {
+      requestAnimationFrame(() => restoreScrollPosition(savedScrollRef.current));
+    }
+    prevActiveRef.current = activeProject;
+  }, [activeProject]);
+
+  const openProjectDetails = (project: Project) => {
+    savedScrollRef.current = getScrollPosition();
     setActiveProject(project);
   };
+
+  const setHover = (s: Sector | null) => ({
+    onMouseEnter: () => { hoverSignal.sector = s; },
+    onMouseLeave: () => { if (hoverSignal.sector === s) hoverSignal.sector = null; },
+  });
 
   // Smooth Scroll con Lenis
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.5,
+      duration: 0.85,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
+      wheelMultiplier: 1.1,
+      touchMultiplier: 1.6,
     });
 
-    lenis.on('scroll', ScrollTrigger.update);
+    lenis.on('scroll', () => {
+      scrollSignal.velocity = lenis.velocity;
+      ScrollTrigger.update();
+    });
     gsap.ticker.add((time) => { lenis.raf(time * 1000); });
     gsap.ticker.lagSmoothing(0, 0);
+    setLenis(lenis);
 
     return () => {
+      setLenis(null);
       gsap.ticker.remove((time) => lenis.raf(time * 1000));
       lenis.destroy();
     };
@@ -258,40 +130,52 @@ function App() {
 
   // Animaciones GSAP
   useEffect(() => {
-    const reveals = gsap.utils.toArray('.gsap-reveal');
-    reveals.forEach((el: any) => {
-      gsap.fromTo(el, 
-        { opacity: 0, y: 80, rotationX: -10 },
+    const reveals = gsap.utils.toArray('.gsap-reveal') as Element[];
+    
+    // Configurar detección de sectores
+    const sectors = ['hero', 'about', 'projects', 'achievements', 'contact'];
+    sectors.forEach(id => {
+      ScrollTrigger.create({
+        trigger: `[data-sector="${id}"]`,
+        start: 'top 40%',
+        end: 'bottom 40%',
+        onEnter: () => { sectorSignal.current = id as Sector; },
+        onEnterBack: () => { sectorSignal.current = id as Sector; },
+      });
+    });
+
+    reveals.forEach((el: Element) => {
+      gsap.fromTo(el,
+        { opacity: 0, y: 50 },
         {
           scrollTrigger: {
             trigger: el,
-            start: 'top 85%',
+            start: 'top 88%',
             end: 'bottom 20%',
             toggleActions: 'play none none reverse',
           },
           y: 0,
-          rotationX: 0,
           opacity: 1,
-          duration: 1.2,
+          duration: 1.0,
           ease: 'expo.out'
         }
       );
     });
 
     // Staggered Tech Cards
-    gsap.fromTo('.tech-card', 
-      { opacity: 0, y: 50, scale: 0.9 },
+    gsap.fromTo('.tech-card',
+      { opacity: 0, y: 30, scale: 0.94 },
       {
         scrollTrigger: {
-          trigger: '.tech-grid',
+          trigger: '#skills',
           start: 'top 85%',
         },
         opacity: 1,
         y: 0,
         scale: 1,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: 'back.out(1.5)'
+        duration: 0.6,
+        stagger: 0.06,
+        ease: 'back.out(1.4)'
       }
     );
   }, []);
@@ -299,190 +183,306 @@ function App() {
   return (
     <>
       <div style={{ display: activeProject ? 'none' : 'block' }}>
-        {/* 3D CANVAS */}
-        <div id="canvas-container" style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 0, pointerEvents: 'none' }}>
-          <Suspense fallback={null}>
-            <Canvas 
-              camera={{ position: [0, 0, 7], fov: 50 }}
-              dpr={1}
-              gl={{ powerPreference: "high-performance", antialias: false, precision: "lowp" }}
-            >
-              <Scene />
-            </Canvas>
-          </Suspense>
-        </div>
+        {/* INTERACTIVE CYBER MATRIX CANVAS BACKGROUND */}
+        <CyberMatrixBackground />
 
         <div className="html-content">
-          {/* FLOATING NAVIGATION */}
+          {/* FLOATING NAVIGATION WITH BILINGUAL SWITCHER */}
           <nav className="floating-nav">
-            <a href="#hero" className="nav-link">Inicio</a>
-            <a href="#skills" className="nav-link">Sobre Mí</a>
-            <a href="#projects" className="nav-link">Portafolio</a>
-            <a href="#contact" className="nav-link">Contacto</a>
+            <a href="#hero" className="nav-link">{t.navHome}</a>
+            <a href="#skills" className="nav-link">{t.navSkills}</a>
+            <a href="#projects" className="nav-link">{t.navProjects}</a>
+            <a href="#certificates" className="nav-link">{t.navCertificates}</a>
+            <a href="#contact" className="nav-link">{t.navContact}</a>
+
+            {/* Selector de Idioma Cyber-Glass */}
+            <div className="lang-switcher-wrap" aria-label="Selector de idioma / Language Switcher">
+              <button
+                type="button"
+                className={`lang-btn ${lang === 'en' ? 'active' : ''}`}
+                onClick={() => setLang('en')}
+                aria-label="Switch interface to English"
+              >
+                EN
+              </button>
+              <span className="lang-divider">/</span>
+              <button
+                type="button"
+                className={`lang-btn ${lang === 'es' ? 'active' : ''}`}
+                onClick={() => setLang('es')}
+                aria-label="Cambiar interfaz a Español"
+              >
+                ES
+              </button>
+            </div>
           </nav>
 
-          {/* HERO SECTION */}
-          <section className="section" id="hero" style={{ height: '100vh', justifyContent: 'center' }}>
-            <div className="gsap-reveal" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              <h1 className="hero-title" style={{ fontSize: 'clamp(2.5rem, 8vw, 7rem)' }}>DANIEL MANCILLA<br/>TEJERINA</h1>
-              <p className="hero-subtitle">
-                <Typewriter words={ROLES} /><br/><br/>
-                Ingeniero de Sistemas enfocado en crear arquitecturas robustas, 
-                sistemas distribuidos y experiencias inmersivas de alto rendimiento.
-              </p>
+          {/* FASE 01: HERO SECTION (Kernel & Mando de Sistemas) */}
+          <section className="section" id="hero" data-sector="hero" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', paddingTop: 'clamp(6rem, 12vh, 12rem)', paddingBottom: '4rem' }}>
+            <div className="hero-cyber-grid gsap-reveal">
               
-              <div className="hero-actions">
-                <a href="/cv.pdf" download className="btn-primary">
-                  <FiDownload size={20} />
-                  Descargar CV
-                </a>
-                <div className="social-links">
-                  <a href="https://github.com/danimtx" target="_blank" rel="noreferrer"><FiGithub size={24} /></a>
-                  <a href="https://www.linkedin.com/in/daniel-mancilla-tejerina-126b07307" target="_blank" rel="noreferrer"><FiLinkedin size={24} /></a>
-                  <a href="https://www.instagram.com/daniel.manci12/" target="_blank" rel="noreferrer"><FiInstagram size={24} /></a>
+              {/* Columna Izquierda: Información de Daniel Mancilla */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.4rem' }}>
+                <div className="hero-telemetry-badge">
+                  <span className="hero-telemetry-dot" />
+                  <span>{t.heroKernelLive}</span>
                 </div>
+
+                <h1 className="hero-title" style={{ fontSize: 'clamp(2.4rem, 6vw, 5.8rem)', marginTop: '0.2rem' }}>
+                  DANIEL MANCILLA<br/>TEJERINA
+                </h1>
+
+                <div className="hero-subtitle">
+                  <Typewriter words={heroRoles} /><br/><br/>
+                  {t.heroBio}
+                </div>
+
+                {/* Fila de logros y badges clave */}
+                <div className="hero-achievements-row">
+                  <div className="hero-achievement-gold" aria-label="ICPC Achievement">
+                    <FiAward size={18} />
+                    <span>{t.heroAchievementIcpc}</span>
+                  </div>
+
+                  <div className="hero-achievement-cyan" aria-label="Architecture Specialization">
+                    <FaLayerGroup size={16} />
+                    <span>{t.heroAchievementArch}</span>
+                  </div>
+
+                  <div className="hero-achievement" aria-label="AI Specialization">
+                    <FaRobot size={16} />
+                    <span>{t.heroAchievementAi}</span>
+                  </div>
+                </div>
+
+                {/* Acciones del Hero */}
+                <div className="hero-actions">
+                  <a href={personalInfo.cvPdf} download className="btn-primary">
+                    <FiDownload size={20} />
+                    {t.heroBtnCv}
+                  </a>
+                  <a href={activeWhatsappLink} target="_blank" rel="noreferrer" className="btn-primary" style={{ borderColor: '#00f0ff', color: '#00f0ff' }}>
+                    <FiSend size={18} />
+                    {t.heroBtnContact}
+                  </a>
+                  <div className="social-links">
+                    <a href={personalInfo.github} target="_blank" rel="noreferrer" aria-label="GitHub de Daniel Mancilla"><FiGithub size={24} /></a>
+                    <a href={personalInfo.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn de Daniel Mancilla"><FiLinkedin size={24} /></a>
+                    <a href={personalInfo.instagram} target="_blank" rel="noreferrer" aria-label="Instagram de Daniel Mancilla"><FiInstagram size={24} /></a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Columna Derecha: Monograma DMT & Terminal Interactiva de Inspección */}
+              <div>
+                <HeroKernelTerminal />
+              </div>
+
+            </div>
+          </section>
+
+          {/* FASE 02: SOBRE MÍ & NÚCLEO DE PROPULSIÓN (Skills & Arquitectura) */}
+          <section className="tech-grid-container section" id="skills" data-sector="about">
+            <h2 className="huge-title gsap-reveal" style={{ top: '-5%' }}>{t.coreHeading}</h2>
+
+            <div className="rail-left anchor3d" {...setHover('about')}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10vh' }}>
+
+                {/* Resumen de perfil y Bio */}
+                <div className="tech-level" data-about-level="1">
+                  <div className="phase-header-badge">
+                    <span>{t.corePhaseBadge}</span>
+                  </div>
+
+                  <div className="gsap-reveal" style={{ maxWidth: '850px', margin: '0 0 3rem 0', textAlign: 'left' }}>
+                    <p style={{ fontSize: '1.25rem', color: '#b0b0c8', lineHeight: 1.85 }}>
+                      {t.coreBioP1}
+                    </p>
+                    <p style={{ fontSize: '1.1rem', color: '#8888a0', lineHeight: 1.75, marginTop: '1rem' }}>
+                      {t.coreBioP2}
+                    </p>
+                  </div>
+
+                  {/* Categoría 1: Backend & Arquitectura */}
+                  <div className="tech-group">
+                    <h3 className="tech-group-title">
+                      <FaServer size={18} />
+                      {skillCategories[0].name} — <span style={{ fontSize: '0.8rem', color: '#888' }}>{skillCategories[0].tag}</span>
+                    </h3>
+                    <p style={{ color: '#8888a0', fontSize: '0.95rem', marginBottom: '1.5rem' }}>{skillCategories[0].description}</p>
+                    <div className="tech-grid">
+                      {skillCategories[0].skills.map((s) => (
+                        <div key={s.name} className="tech-card">
+                          {renderSkillIcon(s.iconKey)}
+                          <span className="tech-name">{s.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Nivel 2 — Frontend, Móvil & 3D */}
+                <div className="tech-level" data-about-level="2">
+                  <div className="tech-group">
+                    <h3 className="tech-group-title">
+                      <FaReact size={18} />
+                      {skillCategories[1].name} — <span style={{ fontSize: '0.8rem', color: '#888' }}>{skillCategories[1].tag}</span>
+                    </h3>
+                    <p style={{ color: '#8888a0', fontSize: '0.95rem', marginBottom: '1.5rem' }}>{skillCategories[1].description}</p>
+                    <div className="tech-grid">
+                      {skillCategories[1].skills.map((s) => (
+                        <div key={s.name} className="tech-card">
+                          {renderSkillIcon(s.iconKey)}
+                          <span className="tech-name">{s.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Esquema interactivo de Clean Architecture */}
+                  <div className="gsap-reveal">
+                    <ArchitectureSchematic />
+                  </div>
+                </div>
+
+                {/* Nivel 3 — IA, Automatización & Datos */}
+                <div className="tech-level" data-about-level="3">
+                  <div className="tech-group">
+                    <h3 className="tech-group-title">
+                      <FaRobot size={18} />
+                      {skillCategories[2].name} — <span style={{ fontSize: '0.8rem', color: '#888' }}>{skillCategories[2].tag}</span>
+                    </h3>
+                    <p style={{ color: '#8888a0', fontSize: '0.95rem', marginBottom: '1.5rem' }}>{skillCategories[2].description}</p>
+                    <div className="tech-grid">
+                      {skillCategories[2].skills.map((s) => (
+                        <div key={s.name} className="tech-card">
+                          {renderSkillIcon(s.iconKey)}
+                          <span className="tech-name">{s.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
           </section>
 
-          {/* SOBRE MI / TECNOLOGÍAS */}
-          <section className="tech-grid-container section" id="skills">
-            <h2 className="huge-title gsap-reveal" style={{ top: '-5%' }}>SOBRE MÍ</h2>
-            
-            <div className="gsap-reveal" style={{ maxWidth: '800px', margin: '0 auto 4rem auto', textAlign: 'center' }}>
-              <p style={{ fontSize: '1.2rem', color: '#a0a0b0', lineHeight: 1.8 }}>
-                Soy Egresado de Ingeniería de Sistemas (UPDS) con un sólido enfoque en el desarrollo de software y la resolución analítica de problemas. Me apasiona la tecnología y estoy capacitado para diseñar e implementar arquitecturas escalables (Clean Architecture, Microservicios). Cuento con experiencia en programación de alto rendimiento competitivo (Top 20 ICPC Bolivia) y en la creación de flujos de trabajo colaborativos modernos.
-              </p>
+          {/* FASE 03: PROYECTOS & SISTEMAS (Engineering Blueprints) */}
+          <section className="section" id="projects" data-sector="projects" style={{ marginTop: '5vh' }}>
+            <h2 className="huge-title gsap-reveal" style={{ top: '-2%' }}>{t.systemsHeading}</h2>
+
+            <div className="phase-header-badge gsap-reveal" style={{ alignSelf: 'flex-start', marginBottom: '2rem' }}>
+              <span>{t.systemsPhaseBadge}</span>
             </div>
 
-            <div className="tech-grid">
-              {/* Backend & Languages */}
-              <div className="tech-card"><FaCode className="tech-icon" /><span className="tech-name">C# / C++</span></div>
-              <div className="tech-card"><FaServer className="tech-icon" /><span className="tech-name">ASP.NET</span></div>
-              <div className="tech-card"><FaPython className="tech-icon" /><span className="tech-name">Python</span></div>
-              <div className="tech-card"><FaPhp className="tech-icon" /><span className="tech-name">PHP</span></div>
-              
-              {/* Frontend & Mobile */}
-              <div className="tech-card"><FaReact className="tech-icon" /><span className="tech-name">React</span></div>
-              <div className="tech-card"><FaMobileAlt className="tech-icon" /><span className="tech-name">React Native</span></div>
-              <div className="tech-card"><FaAngular className="tech-icon" /><span className="tech-name">Angular</span></div>
-              <div className="tech-card"><FaJs className="tech-icon" /><span className="tech-name">JavaScript</span></div>
-              <div className="tech-card"><FaHtml5 className="tech-icon" /><span className="tech-name">HTML & CSS</span></div>
-              
-              {/* Databases & Tools */}
-              <div className="tech-card"><FaDatabase className="tech-icon" /><span className="tech-name">SQL Server</span></div>
-              <div className="tech-card"><FaDatabase className="tech-icon" /><span className="tech-name">MySQL / Postgres</span></div>
-              <div className="tech-card"><FaFire className="tech-icon" /><span className="tech-name">Firebase</span></div>
-              <div className="tech-card"><FaDocker className="tech-icon" /><span className="tech-name">Docker</span></div>
-              <div className="tech-card"><FaGitAlt className="tech-icon" /><span className="tech-name">Git / GitHub</span></div>
-              <div className="tech-card"><FaGamepad className="tech-icon" /><span className="tech-name">Unity 3D</span></div>
+            <div className="rail-left anchor3d" {...setHover('projects')}>
+              <SystemsShowcase 
+                onOpenProjectDetails={openProjectDetails} 
+              />
             </div>
           </section>
 
-          {/* PROJECTS SECTION */}
-          <section className="section" id="projects" style={{ marginTop: '5vh' }}>
-            <h2 className="huge-title gsap-reveal" style={{ top: '-2%' }}>PROYECTOS</h2>
-            
-            <div className="projects-container">
-              {projects.map((project, index) => (
-                <div key={project.id} className="project-row">
-                  
-                  <div className="project-image-wrapper gsap-reveal">
-                    <img src={project.image} alt={project.title} />
-                  </div>
-                  
-                  <div className="project-info gsap-reveal">
-                    <span style={{ color: '#666', fontWeight: 800, fontSize: '1.5rem' }}>0{index + 1}</span>
-                    <h3>{project.title}</h3>
-                    <div className="project-subtitle">{project.subtitle}</div>
-                    <p className="project-description">{project.description}</p>
-                    
-                    <div style={{ marginBottom: '1.5rem' }}>
-                      {project.tech.map(tech => (
-                        <span key={tech} className="tag">{tech}</span>
-                      ))}
+          {/* FASE 04: LOGROS & ICPC (Cinturón de Desafíos Algorítmicos) */}
+          <section className="section" id="certificates" data-sector="achievements" style={{ marginTop: '15vh' }}>
+            <h2 className="huge-title gsap-reveal" style={{ top: '-5%', left: 'auto', right: '5%' }}>{t.achievementsHeading}</h2>
+
+            <div className="rail-left anchor3d" {...setHover('achievements')}>
+              <div className="phase-header-badge gsap-reveal">
+                <span>{t.achievementsPhaseBadge}</span>
+              </div>
+
+              {/* Visualizador de Grafos & ICPC */}
+              <div className="gsap-reveal">
+                <AlgorithmVisualizer />
+              </div>
+
+              <h3 className="gsap-reveal" style={{ marginBottom: '2rem', fontSize: '2rem', color: 'var(--accent-main)' }}>
+                {t.achievementsCertTitle}
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '2rem', width: '100%', marginBottom: '4rem' }}>
+                {mainCertificates.map((cert) => (
+                  <div key={cert.id} className="certificate-card gsap-reveal">
+                    <div className="cert-img-wrapper">
+                      <img src={cert.img} alt={cert.title} loading="lazy" />
                     </div>
-                    
-                    <div className="project-links">
-                      {project.link && (
-                        <a href={project.link} className="view-btn" target="_blank" rel="noreferrer">
-                          <FiExternalLink size={18} /> Ver Deploy
-                        </a>
-                      )}
-                      {project.github && (
-                        <a href={project.github} className="view-btn github-btn" target="_blank" rel="noreferrer">
-                          <FiGithub size={18} /> Código
-                        </a>
-                      )}
-                      {project.apk && (
-                        <a href={project.apk} download className="view-btn" target="_blank" rel="noreferrer" style={{ color: 'var(--accent-main)' }}>
-                          <FiDownload size={18} /> Descargar APK
-                        </a>
-                      )}
-                      <button onClick={() => openProjectDetails(project)} className="view-btn" style={{ color: 'var(--accent-main)' }}>
-                        <FiImage size={18} /> Ver Detalles
-                      </button>
-                      {!project.link && !project.github && !project.apk && (
-                        <span className="private-code-badge">Código Privado / Offline</span>
-                      )}
+                    <h4>{cert.title}</h4>
+                    {cert.institution && (
+                      <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.75rem', color: '#8888aa', textAlign: 'center', marginTop: '0.4rem' }}>
+                        {cert.institution} {cert.year ? `· ${cert.year}` : ''}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <h3 className="gsap-reveal" style={{ marginBottom: '2rem', fontSize: '1.8rem', color: '#00f0ff' }}>
+                {t.achievementsTrainingTitle}
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(250px, 100%), 1fr))', gap: '2rem', width: '100%' }}>
+                {otherCertificates.map((cert) => (
+                  <div key={cert.id} className="certificate-card gsap-reveal">
+                    <div className="cert-img-wrapper" style={{ height: '200px' }}>
+                      <img src={cert.img} alt={cert.title} loading="lazy" />
                     </div>
+                    <h4 style={{ fontSize: '0.95rem' }}>{cert.title}</h4>
+                    {cert.institution && (
+                      <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.72rem', color: '#777790', textAlign: 'center', marginTop: '0.3rem' }}>
+                        {cert.institution}
+                      </div>
+                    )}
                   </div>
-                  
-                </div>
-              ))}
-            </div>
-          </section>
+                ))}
+              </div>
 
-          {/* CERTIFICATES SECTION */}
-          <section className="section" id="certificates" style={{ marginTop: '15vh' }}>
-            <h2 className="huge-title gsap-reveal" style={{ top: '-5%', left: 'auto', right: '5%' }}>LOGROS</h2>
-            
-            <h3 className="gsap-reveal" style={{ marginBottom: '2rem', fontSize: '2rem', color: 'var(--accent-main)' }}>Logros Destacados</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', width: '100%', marginBottom: '5rem' }}>
-              {mainCertificates.map((cert) => (
-                <div key={cert.id} className="certificate-card gsap-reveal">
-                  <div className="cert-img-wrapper">
-                    <img src={cert.img} alt={cert.title} />
-                  </div>
-                  <h4>{cert.title}</h4>
-                </div>
-              ))}
-            </div>
-
-            <h3 className="gsap-reveal" style={{ marginBottom: '2rem', fontSize: '2rem', color: 'var(--accent-main)' }}>Otros Certificados</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem', width: '100%' }}>
-              {otherCertificates.map((cert) => (
-                <div key={cert.id} className="certificate-card gsap-reveal">
-                  <div className="cert-img-wrapper" style={{ height: '200px' }}>
-                    <img src={cert.img} alt={cert.title} />
-                  </div>
-                  <h4 style={{ fontSize: '1rem' }}>{cert.title}</h4>
-                </div>
-              ))}
-            </div>
-            
-            <div className="gsap-reveal" style={{ marginTop: '4rem', textAlign: 'center' }}>
-              <a href="https://drive.google.com/drive/folders/1y2VGjOfiBiBp704HHIUTN_AKefKXuZR6?usp=sharing" target="_blank" rel="noreferrer" className="btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.2rem' }}>
-                <FiExternalLink size={24} />
-                Ver Todos Mis Certificados (Drive)
-              </a>
-            </div>
-          </section>
-          
-          {/* CONTACT SECTION */}
-          <section className="section" id="contact" style={{ minHeight: '80vh', alignItems: 'center', textAlign: 'center' }}>
-            <div className="gsap-reveal" style={{ background: 'rgba(0,0,0,0.5)', padding: '5rem', borderRadius: '30px', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.05)' }}>
-              <h2 style={{ fontSize: 'clamp(3rem, 6vw, 5rem)', marginBottom: '1rem', color: '#fff' }}>¿Iniciamos?</h2>
-              <p style={{ fontSize: '1.2rem', color: '#aaa', marginBottom: '3rem', maxWidth: '600px', marginLeft: 'auto', marginRight: 'auto' }}>
-                Si tienes un desafío arquitectónico, un problema algorítmico o un proyecto de alto nivel, hablemos. Resido en Tarija, Bolivia, y estoy listo para crear impacto real.
-              </p>
-              
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', alignItems: 'center' }}>
-                <a href="mailto:daniel.mancilla.tx33@gmail.com" className="view-btn" style={{ fontSize: '1.2rem', width: 'fit-content' }}>
-                  <span style={{ color: 'var(--accent-main)' }}>Email:</span> daniel.mancilla.tx33@gmail.com
+              <div className="gsap-reveal" style={{ marginTop: '4rem', display: 'flex', justifyContent: 'center', width: '100%' }}>
+                <a href={personalInfo.driveCertificates} target="_blank" rel="noreferrer" className="btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}>
+                  <FiExternalLink size={22} />
+                  {t.achievementsDriveBtn}
                 </a>
-                <a href="https://wa.me/59171168130" target="_blank" rel="noreferrer" className="view-btn" style={{ fontSize: '1.2rem', width: 'fit-content' }}>
-                  <span style={{ color: 'var(--accent-main)' }}>WhatsApp:</span> +591 71168130
+              </div>
+            </div>
+          </section>
+
+          {/* FASE 05: CONTACTO (Estación de Transmisión Cuántica) */}
+          <section className="section" id="contact" data-sector="contact" style={{ minHeight: '90vh', alignItems: 'center' }}>
+            <div className="gsap-reveal contact-panel" {...setHover('contact')}>
+              <div className="phase-header-badge" style={{ margin: '0 auto 1.5rem auto' }}>
+                <span>{t.contactPhaseBadge}</span>
+              </div>
+
+              <h2 style={{ fontSize: 'clamp(2.5rem, 6vw, 4.2rem)', marginBottom: '1rem', color: '#fff', letterSpacing: '-0.5px' }}>
+                {t.contactHeading}
+              </h2>
+              
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontFamily: '"JetBrains Mono", monospace', fontSize: '0.8rem', color: '#00f0ff', marginBottom: '1.5rem' }}>
+                <span className="hero-telemetry-dot" />
+                <span>{t.contactStatus}</span>
+              </div>
+
+              <p style={{ fontSize: '1.15rem', color: '#b0b0c0', lineHeight: 1.75, marginBottom: '2.5rem' }}>
+                {t.contactDesc}
+              </p>
+
+              <div className="contact-row">
+                <a href={`mailto:${personalInfo.email}`} className="view-btn contact-link" style={{ fontSize: '1.05rem' }}>
+                  <span style={{ color: 'var(--accent-main)' }}>{t.contactEmailLabel}</span> {personalInfo.email}
+                </a>
+                <a href={activeWhatsappLink} target="_blank" rel="noreferrer" className="view-btn" style={{ fontSize: '1.05rem', color: '#00f0ff' }}>
+                  <span style={{ color: '#00f0ff' }}>{t.contactWhatsappLabel}</span> {personalInfo.whatsapp}
+                </a>
+              </div>
+
+              <div className="social-links contact-social">
+                <a href={personalInfo.github} target="_blank" rel="noreferrer" aria-label="GitHub de Daniel Mancilla"><FiGithub size={24} /></a>
+                <a href={personalInfo.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn de Daniel Mancilla"><FiLinkedin size={24} /></a>
+                <a href={personalInfo.instagram} target="_blank" rel="noreferrer" aria-label="Instagram de Daniel Mancilla"><FiInstagram size={24} /></a>
+              </div>
+
+              <div style={{ marginTop: '3rem' }}>
+                <a href={personalInfo.cvPdf} download className="btn-primary">
+                  <FiDownload size={18} />
+                  {t.contactBtnCv}
                 </a>
               </div>
             </div>
@@ -491,17 +491,10 @@ function App() {
       </div>
 
       {activeProject && <ProjectFullScreen project={activeProject} onClose={() => setActiveProject(null)} />}
-
-      <div className="html-content" style={{ display: activeProject ? 'none' : 'block' }}>
-        <Loader 
-          containerStyles={{ background: '#020205' }}
-          innerStyles={{ width: '300px' }}
-          barStyles={{ background: '#bf00ff' }}
-          dataInterpolation={(p) => `Cargando Experiencia 3D ${p.toFixed(0)}%`}
-        />
-      </div>
     </>
   );
 }
 
 export default App;
+
+
