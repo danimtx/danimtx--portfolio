@@ -7,6 +7,13 @@ export const ExperienceSection: React.FC = () => {
   const { lang } = useLanguage();
   const t = translations[lang].experience;
 
+  // Apple Spotlight Effect on Pointer Move
+  const handleSpotlight = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+    e.currentTarget.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+  };
+
   return (
     <section id="experiencia" className="w-full px-4 sm:px-6 lg:px-10 py-16 md:py-24 bg-white border-b border-neutral-200">
       <div className="max-w-7xl mx-auto space-y-12">
@@ -31,7 +38,8 @@ export const ExperienceSection: React.FC = () => {
           {t.items.map((item, index) => (
             <div
               key={item.id}
-              className="relative p-6 sm:p-8 lg:p-10 rounded-3xl bg-[#F8F8F6] border border-neutral-200/80 hover:border-neutral-300 hover:bg-neutral-50/90 transition-all duration-300 hover:shadow-xl group"
+              onMouseMove={handleSpotlight}
+              className="apple-spotlight apple-spotlight-inner relative p-6 sm:p-8 lg:p-10 rounded-3xl bg-[#F8F8F6] border border-neutral-200/80 hover:border-neutral-300 hover:bg-neutral-50/90 transition-all duration-300 hover:shadow-xl group"
             >
               <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
                 

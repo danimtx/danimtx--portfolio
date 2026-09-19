@@ -1,16 +1,25 @@
 import React, { useState } from 'react';
-import { Sparkles, CheckCircle } from 'lucide-react';
+import { Sparkles, CheckCircle, ArrowUpRight } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
-import { translations } from '../i18n/translations';
+import { translations, TranslatedProject } from '../i18n/translations';
+import { ProjectDetailModal } from './ProjectDetailModal';
 
 export const ProjectsShowcase: React.FC = () => {
   const [selectedFilter, setSelectedFilter] = useState<string>('all');
+  const [activeModalProject, setActiveModalProject] = useState<TranslatedProject | null>(null);
   const { lang } = useLanguage();
   const t = translations[lang].projects;
 
   const filteredProjects = selectedFilter === 'all'
     ? t.items
     : t.items.filter(p => p.category.toLowerCase().includes(selectedFilter.toLowerCase()));
+
+  // Apple Spotlight Effect on Pointer Move
+  const handleSpotlight = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+    e.currentTarget.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+  };
 
   return (
     <section id="proyectos" className="w-full px-4 sm:px-6 lg:px-10 py-12 md:py-24 bg-[#F2F2EE]">
@@ -37,7 +46,7 @@ export const ProjectsShowcase: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => setSelectedFilter(tab.id)}
-              className={`px-4 py-2 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer ${
+              className={`px-4 py-2 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer apple-press ${
                 selectedFilter === tab.id
                   ? 'bg-[#101010] text-[#D4F014] shadow-md'
                   : 'bg-white text-neutral-700 hover:bg-neutral-100 border border-neutral-200/80'
@@ -53,7 +62,8 @@ export const ProjectsShowcase: React.FC = () => {
           {filteredProjects.map((project) => (
             <article
               key={project.id}
-              className="bg-white rounded-[32px] p-6 sm:p-10 lg:p-12 border border-neutral-200/90 shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:border-neutral-300"
+              onMouseMove={handleSpotlight}
+              className="apple-spotlight apple-spotlight-inner bg-white rounded-[32px] p-6 sm:p-10 lg:p-12 border border-neutral-200/90 shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:border-neutral-300"
             >
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                 {/* Left Column: Project Details */}
@@ -74,7 +84,10 @@ export const ProjectsShowcase: React.FC = () => {
 
                   {/* Title & Subtitle */}
                   <div>
-                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#111111] tracking-tight">
+                    <h3
+                      onClick={() => setActiveModalProject(project)}
+                      className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#111111] tracking-tight hover:text-neutral-700 cursor-pointer transition-colors"
+                    >
                       {project.title}
                     </h3>
                     <p className="text-xs sm:text-sm font-semibold text-[#6E6E73] mt-1">
@@ -136,24 +149,42 @@ export const ProjectsShowcase: React.FC = () => {
                     </div>
                   )}
 
-                  {/* Role Badge */}
-                  <div className="text-xs text-neutral-500 font-medium">
-                    <span className="font-semibold text-neutral-800">{t.labels.role}</span> {project.role}
+                  {/* Apple Quick-View Modal Trigger Button */}
+                  <div className="pt-4 flex flex-wrap items-center justify-between gap-3 border-t border-neutral-100">
+                    <div className="text-xs text-neutral-500 font-medium">
+                      <span className="font-semibold text-neutral-800">{t.labels.role}</span> {project.role}
+                    </div>
+
+                    <button
+                      onClick={() => setActiveModalProject(project)}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#101010] hover:bg-black text-white text-xs font-bold transition-all duration-150 apple-press shadow-xs hover:shadow-md cursor-pointer group/btn"
+                    >
+                      <span>{lang === 'es' ? 'Ver Especificaciones' : 'View Architecture Specs'}</span>
+                      <ArrowUpRight className="w-3.5 h-3.5 text-[#D4F014] transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                    </button>
                   </div>
                 </div>
 
                 {/* Right Column: Visual Mockup */}
                 <div className="lg:col-span-6 order-1 lg:order-2">
-                  <div className="relative rounded-[24px] overflow-hidden bg-neutral-900 border border-neutral-200 shadow-lg group aspect-video sm:aspect-[4/3] flex items-center justify-center p-2">
+                  <div
+                    onClick={() => setActiveModalProject(project)}
+                    className="relative rounded-[24px] overflow-hidden bg-neutral-900 border border-neutral-200 shadow-lg group aspect-video sm:aspect-[4/3] flex items-center justify-center p-2 cursor-pointer apple-press"
+                  >
                     <img
                       src={project.featuredImage}
                       alt={project.title}
-                      className="w-full h-full object-contain object-center rounded-[18px] transition-transform duration-500 group-hover:scale-[1.02]"
+                      className="w-full h-full object-contain object-center rounded-[18px] transition-transform duration-500 group-hover:scale-[1.03]"
                       loading="lazy"
                     />
 
                     <div className="absolute top-4 right-4 px-3 py-1.5 rounded-full bg-black/70 backdrop-blur-md text-white text-xs font-semibold border border-white/10">
                       {project.category}
+                    </div>
+
+                    <div className="absolute bottom-4 right-4 px-3 py-1.5 rounded-full bg-[#D4F014] text-black text-xs font-extrabold shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1">
+                      <span>{lang === 'es' ? 'Abrir Ficha' : 'Expand'}</span>
+                      <ArrowUpRight className="w-3 h-3" />
                     </div>
                   </div>
                 </div>
@@ -163,6 +194,12 @@ export const ProjectsShowcase: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {/* Apple-grade Quick-View Architecture Modal */}
+      <ProjectDetailModal
+        project={activeModalProject}
+        onClose={() => setActiveModalProject(null)}
+      />
     </section>
   );
 };

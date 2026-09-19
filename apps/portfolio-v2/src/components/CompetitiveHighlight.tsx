@@ -8,6 +8,13 @@ export const CompetitiveHighlight: React.FC = () => {
   const t = translations[lang].icpc;
   const [activeCert, setActiveCert] = useState<'icpc' | 'ieee'>('icpc');
 
+  // Apple Spotlight Effect on Pointer Move
+  const handleSpotlight = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+    e.currentTarget.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+  };
+
   return (
     <section id="icpc" className="w-full px-4 sm:px-6 lg:px-10 py-16 md:py-24">
       <div className="max-w-7xl mx-auto space-y-12">
@@ -30,7 +37,10 @@ export const CompetitiveHighlight: React.FC = () => {
         {/* ICPC & IEEEXtreme Feature Card Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           {/* Main Editorial Achievement Card */}
-          <div className="lg:col-span-7 rounded-[32px] bg-[#101010] text-white p-8 sm:p-12 flex flex-col justify-between space-y-8 shadow-xl">
+          <div
+            onMouseMove={handleSpotlight}
+            className="apple-spotlight apple-spotlight-inner lg:col-span-7 rounded-[32px] bg-[#101010] text-white p-8 sm:p-12 flex flex-col justify-between space-y-8 shadow-xl"
+          >
             <div className="space-y-4">
               <div className="flex flex-wrap items-center gap-3">
                 <span className="px-3 py-1 rounded-full bg-[#D4F014] text-black font-extrabold text-xs">
@@ -82,14 +92,17 @@ export const CompetitiveHighlight: React.FC = () => {
           {/* Right Column: Verified Certificates Switcher */}
           <div className="lg:col-span-5 flex flex-col justify-between gap-6">
             {/* Interactive Certificate Card with Tabs */}
-            <div className="bg-white rounded-[32px] p-6 border border-neutral-200 shadow-md space-y-4">
+            <div
+              onMouseMove={handleSpotlight}
+              className="apple-spotlight apple-spotlight-inner bg-white rounded-[32px] p-6 border border-neutral-200 shadow-md space-y-4"
+            >
               
               {/* Certificate Switcher Pills */}
               <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
                 <div className="flex items-center gap-1.5 p-1 rounded-full bg-neutral-100 text-xs font-bold">
                   <button
                     onClick={() => setActiveCert('icpc')}
-                    className={`px-3 py-1 rounded-full transition-all cursor-pointer ${
+                    className={`px-3 py-1 rounded-full transition-all cursor-pointer apple-press ${
                       activeCert === 'icpc'
                         ? 'bg-[#101010] text-[#D4F014] shadow-xs'
                         : 'text-neutral-600 hover:text-black'
@@ -99,7 +112,7 @@ export const CompetitiveHighlight: React.FC = () => {
                   </button>
                   <button
                     onClick={() => setActiveCert('ieee')}
-                    className={`px-3 py-1 rounded-full transition-all cursor-pointer ${
+                    className={`px-3 py-1 rounded-full transition-all cursor-pointer apple-press ${
                       activeCert === 'ieee'
                         ? 'bg-[#101010] text-[#D4F014] shadow-xs'
                         : 'text-neutral-600 hover:text-black'

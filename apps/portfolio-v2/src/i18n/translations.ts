@@ -60,8 +60,8 @@ export const translations = {
       metric2Label: 'IEEEXtreme 18.0 Bolivia (+19k Global)',
       metric3Value: '5+',
       metric3Label: 'Key Production Projects Delivered',
-      metric4Value: '3+',
-      metric4Label: 'Years Building Scalable Software',
+      metric4Value: '+1 Year',
+      metric4Label: 'Building Scalable Software',
       photoBadgeTitle: 'danimtx // Stealth Core',
       photoBadgeSub: 'Feline Precision & Algorithmic Focus'
     },
@@ -473,8 +473,8 @@ export const translations = {
       metric2Label: 'IEEEXtreme 18.0 Bolivia (+19k Global)',
       metric3Value: '5+',
       metric3Label: 'Proyectos Web & Móvil en Producción',
-      metric4Value: '3+',
-      metric4Label: 'Años Construyendo Software',
+      metric4Value: '+1 Año',
+      metric4Label: 'Construyendo Software Escalable',
       photoBadgeTitle: 'danimtx // Stealth Core',
       photoBadgeSub: 'Precisión Felina & Enfoque Algorítmico'
     },

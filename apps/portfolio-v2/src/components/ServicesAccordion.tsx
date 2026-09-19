@@ -18,6 +18,13 @@ export const ServicesAccordion: React.FC = () => {
   const activeService = t.items.find((s) => s.id === activeId) || t.items[0];
   const ActiveIcon = iconMap[activeService.id] || Smartphone;
 
+  // Apple Spotlight Effect on Pointer Move
+  const handleSpotlight = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+    e.currentTarget.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+  };
+
   return (
     <section id="servicios" className="w-full px-4 sm:px-6 lg:px-10 py-12 md:py-20">
       <div className="max-w-7xl mx-auto space-y-12">
@@ -48,7 +55,8 @@ export const ServicesAccordion: React.FC = () => {
                 <div
                   key={service.id}
                   onClick={() => setActiveId(service.id)}
-                  className={`group p-6 rounded-3xl cursor-pointer transition-all duration-300 border ${
+                  onMouseMove={handleSpotlight}
+                  className={`group apple-spotlight apple-spotlight-inner apple-press p-6 rounded-3xl cursor-pointer transition-all duration-300 border ${
                     isActive
                       ? 'bg-[#101010] text-white border-black shadow-xl'
                       : 'bg-white text-neutral-900 border-neutral-200/80 hover:border-neutral-300 hover:bg-neutral-50/80'
@@ -75,7 +83,7 @@ export const ServicesAccordion: React.FC = () => {
                       </div>
                     </div>
                     <div
-                      className={`w-9 h-9 rounded-full flex items-center justify-center transition-transform ${
+                      className={`w-9 h-9 rounded-full flex items-center justify-center transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                         isActive
                           ? 'bg-white/10 text-white rotate-45'
                           : 'bg-neutral-100 text-neutral-500 group-hover:bg-neutral-200 group-hover:translate-x-0.5'
@@ -94,7 +102,10 @@ export const ServicesAccordion: React.FC = () => {
           </div>
 
           {/* Right Column: Active Service Deep Dive Card */}
-          <div className="lg:col-span-6 bg-white rounded-3xl p-6 sm:p-8 border border-neutral-200/90 shadow-lg sticky top-24 space-y-6">
+          <div
+            onMouseMove={handleSpotlight}
+            className="apple-spotlight apple-spotlight-inner lg:col-span-6 bg-white rounded-3xl p-6 sm:p-8 border border-neutral-200/90 shadow-lg sticky top-24 space-y-6"
+          >
             <div className="flex items-center justify-between border-b border-neutral-100 pb-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-neutral-100 flex items-center justify-center text-black">

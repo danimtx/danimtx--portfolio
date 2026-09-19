@@ -26,7 +26,7 @@ export const Footer: React.FC = () => {
             <div className="flex flex-wrap items-center gap-3">
               <a
                 href="mailto:danimtx03@gmail.com"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#D4F014] text-black font-bold text-sm hover:bg-[#bce00e] transition-all group"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#D4F014] text-black font-bold text-sm hover:bg-[#bce00e] transition-all group apple-press"
               >
                 <span>{t.emailBtn}</span>
                 <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -36,7 +36,7 @@ export const Footer: React.FC = () => {
                 href={cvUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/15 text-white font-semibold text-sm border border-white/15 transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/15 text-white font-semibold text-sm border border-white/15 transition-all apple-press"
               >
                 <FileText className="w-4 h-4 text-neutral-400" />
                 <span>{t.cvBtn}</span>

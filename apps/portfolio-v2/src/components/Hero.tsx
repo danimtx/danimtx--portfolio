@@ -6,6 +6,33 @@ export const Hero: React.FC = () => {
   const { lang } = useLanguage();
   const t = translations[lang].hero;
 
+  // Apple-grade 3D Interactive Spatial Parallax Tilt
+  const [tilt, setTilt] = React.useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = React.useState(false);
+  const emblemRef = React.useRef<HTMLDivElement | null>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!emblemRef.current) return;
+    const rect = emblemRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    // Calculate continuous physical tilt
+    const rotateY = ((x - centerX) / centerX) * 16;
+    const rotateX = -((y - centerY) / centerY) * 16;
+    setTilt({ x: rotateX, y: rotateY });
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setTilt({ x: 0, y: 0 });
+  };
+
   return (
     <section id="hero" className="w-full px-4 sm:px-6 lg:px-10 pt-2 pb-12">
       <div className="max-w-7xl mx-auto">
@@ -25,11 +52,11 @@ export const Hero: React.FC = () => {
                 {t.stackLabel}
               </span>
               <div className="flex flex-wrap items-center gap-1.5">
-                <span className="px-2.5 py-1 rounded-md bg-white/10 text-white font-medium text-[11px]">.NET (C#)</span>
-                <span className="px-2.5 py-1 rounded-md bg-white/10 text-white font-medium text-[11px]">NestJS</span>
-                <span className="px-2.5 py-1 rounded-md bg-white/10 text-white font-medium text-[11px]">React</span>
-                <span className="px-2.5 py-1 rounded-md bg-white/10 text-white font-medium text-[11px]">React Native (Expo)</span>
-                <span className="px-2.5 py-1 rounded-md bg-white/10 text-white font-medium text-[11px]">Angular</span>
+                <span className="px-2.5 py-1 rounded-md bg-white/10 text-white font-medium text-[11px] apple-press">.NET (C#)</span>
+                <span className="px-2.5 py-1 rounded-md bg-white/10 text-white font-medium text-[11px] apple-press">NestJS</span>
+                <span className="px-2.5 py-1 rounded-md bg-white/10 text-white font-medium text-[11px] apple-press">React</span>
+                <span className="px-2.5 py-1 rounded-md bg-white/10 text-white font-medium text-[11px] apple-press">React Native (Expo)</span>
+                <span className="px-2.5 py-1 rounded-md bg-white/10 text-white font-medium text-[11px] apple-press">Angular</span>
               </div>
             </div>
           </div>
@@ -49,11 +76,11 @@ export const Hero: React.FC = () => {
                 </p>
               </div>
 
-              {/* Action Buttons */}
+              {/* Action Buttons with Apple Press Feedback */}
               <div className="flex flex-wrap items-center gap-3 pt-2">
                 <a
                   href="#contacto"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#D4F014] text-black font-bold text-sm hover:bg-[#bce00e] hover:shadow-lg hover:shadow-[#D4F014]/20 transition-all duration-200 group"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#D4F014] text-black font-bold text-sm hover:bg-[#bce00e] hover:shadow-lg hover:shadow-[#D4F014]/20 transition-all duration-200 group apple-press"
                 >
                   <span>{t.ctaWork}</span>
                   <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -61,68 +88,93 @@ export const Hero: React.FC = () => {
 
                 <a
                   href="#proyectos"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/15 text-white font-semibold text-sm border border-white/15 backdrop-blur-md transition-all duration-200"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/15 text-white font-semibold text-sm border border-white/15 backdrop-blur-md transition-all duration-200 apple-press"
                 >
                   <span>{t.ctaProjects}</span>
                 </a>
               </div>
             </div>
 
-            {/* Right Column: Stealth Cat Logo directly on the dark canvas */}
-            <div className="lg:col-span-5 relative flex items-center justify-center py-6 lg:py-0 select-none">
+            {/* Right Column: Stealth Cat Logo with 3D Spatial Parallax */}
+            <div
+              ref={emblemRef}
+              onMouseMove={handleMouseMove}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+              style={{ perspective: 1000 }}
+              className="lg:col-span-5 relative flex items-center justify-center py-6 lg:py-0 select-none cursor-pointer"
+            >
               {/* Subtle ambient lime glow behind the mark */}
-              <div className="absolute w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full bg-[#D4F014]/12 blur-[100px] pointer-events-none -z-0" />
+              <div
+                className="absolute w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full bg-[#D4F014]/14 blur-[110px] pointer-events-none transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                style={{
+                  transform: `translate(${tilt.y * 1.5}px, ${-tilt.x * 1.5}px)`,
+                }}
+              />
 
-              {/* Direct Stealth Cat Vector Logo - Clean, bold, seamlessly on black background */}
-              <svg
-                viewBox="0 0 120 120"
-                className="relative z-10 w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 drop-shadow-[0_0_40px_rgba(212,240,20,0.25)] transition-transform duration-500 hover:scale-105"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-label="danimtx Stealth Cat Brand Mark"
+              {/* Direct Stealth Cat Vector Logo - Physically tilted in 3D */}
+              <div
+                style={{
+                  transform: isHovered
+                    ? `rotateX(${tilt.x.toFixed(2)}deg) rotateY(${tilt.y.toFixed(2)}deg) scale(1.05)`
+                    : 'rotateX(0deg) rotateY(0deg) scale(1)',
+                  transition: isHovered
+                    ? 'transform 100ms ease-out'
+                    : 'transform 600ms cubic-bezier(0.16, 1, 0.3, 1)',
+                  transformStyle: 'preserve-3d',
+                }}
+                className="will-change-transform"
               >
-                <defs>
-                  <linearGradient id="heroCatGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#E6FF2E" />
-                    <stop offset="50%" stopColor="#D4F014" />
-                    <stop offset="100%" stopColor="#8AC600" />
-                  </linearGradient>
-                </defs>
+                <svg
+                  viewBox="0 0 120 120"
+                  className="relative z-10 w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 drop-shadow-[0_0_40px_rgba(212,240,20,0.25)]"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-label="danimtx Stealth Cat Brand Mark"
+                >
+                  <defs>
+                    <linearGradient id="heroCatGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#E6FF2E" />
+                      <stop offset="50%" stopColor="#D4F014" />
+                      <stop offset="100%" stopColor="#8AC600" />
+                    </linearGradient>
+                  </defs>
 
-                {/* Left Ear */}
-                <polygon points="30,22 48,52 26,52" fill="url(#heroCatGrad)" />
-                <polygon points="33,28 45,50 28,50" fill="#141414" />
+                  {/* Left Ear */}
+                  <polygon points="30,22 48,52 26,52" fill="url(#heroCatGrad)" />
+                  <polygon points="33,28 45,50 28,50" fill="#141414" />
 
-                {/* Right Ear */}
-                <polygon points="90,22 94,52 72,52" fill="url(#heroCatGrad)" />
-                <polygon points="87,28 92,50 75,50" fill="#141414" />
+                  {/* Right Ear */}
+                  <polygon points="90,22 94,52 72,52" fill="url(#heroCatGrad)" />
+                  <polygon points="87,28 92,50 75,50" fill="#141414" />
 
-                {/* Crown bridge between ears */}
-                <path d="M48,52 L72,52 L60,62 Z" fill="#1a1a1a" stroke="url(#heroCatGrad)" strokeWidth="2" />
+                  {/* Crown bridge between ears */}
+                  <path d="M48,52 L72,52 L60,62 Z" fill="#1a1a1a" stroke="url(#heroCatGrad)" strokeWidth="2" />
 
-                {/* Sleek Cat Mask Outline */}
-                <polygon
-                  points="26,52 60,38 94,52 90,84 60,102 30,84"
-                  fill="#141414"
-                  stroke="url(#heroCatGrad)"
-                  strokeWidth="3.2"
-                  strokeLinejoin="round"
-                />
+                  {/* Sleek Cat Mask Outline */}
+                  <polygon
+                    points="26,52 60,38 94,52 90,84 60,102 30,84"
+                    fill="#141414"
+                    stroke="url(#heroCatGrad)"
+                    strokeWidth="3.2"
+                    strokeLinejoin="round"
+                  />
 
-                {/* Glowing Slit Eyes */}
-                <polygon points="40,64 54,66 44,74" fill="#D4F014" filter="drop-shadow(0 0 8px #D4F014)" />
-                <polygon points="80,64 66,66 76,74" fill="#D4F014" filter="drop-shadow(0 0 8px #D4F014)" />
+                  {/* Glowing Slit Eyes with Subtle Breathing Pulse */}
+                  <polygon points="40,64 54,66 44,74" fill="#D4F014" className="animate-cat-eyes" />
+                  <polygon points="80,64 66,66 76,74" fill="#D4F014" className="animate-cat-eyes" />
 
-                {/* Nose prompt */}
-                <circle cx="60" cy="80" r="2.6" fill="#D4F014" />
+                  {/* Nose prompt */}
+                  <circle cx="60" cy="80" r="2.6" fill="#D4F014" />
 
-                {/* Whiskers */}
-                <line x1="20" y1="72" x2="36" y2="72" stroke="#D4F014" strokeWidth="2.5" strokeLinecap="round" opacity="0.85" />
-                <line x1="22" y1="80" x2="38" y2="78" stroke="#D4F014" strokeWidth="2.5" strokeLinecap="round" opacity="0.85" />
-                
-                <line x1="100" y1="72" x2="84" y2="72" stroke="#D4F014" strokeWidth="2.5" strokeLinecap="round" opacity="0.85" />
-                <line x1="98" y1="80" x2="82" y2="78" stroke="#D4F014" strokeWidth="2.5" strokeLinecap="round" opacity="0.85" />
-              </svg>
+                  {/* Whiskers */}
+                  <line x1="20" y1="72" x2="36" y2="72" stroke="#D4F014" strokeWidth="2.5" strokeLinecap="round" opacity="0.85" />
+                  <line x1="22" y1="80" x2="38" y2="78" stroke="#D4F014" strokeWidth="2.5" strokeLinecap="round" opacity="0.85" />
+                  
+                  <line x1="100" y1="72" x2="84" y2="72" stroke="#D4F014" strokeWidth="2.5" strokeLinecap="round" opacity="0.85" />
+                  <line x1="98" y1="80" x2="82" y2="78" stroke="#D4F014" strokeWidth="2.5" strokeLinecap="round" opacity="0.85" />
+                </svg>
+              </div>
             </div>
 
           </div>
