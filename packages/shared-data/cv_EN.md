@@ -26,35 +26,38 @@ Two-time regional finalist in the ACM-ICPC South America Finals (2024 and 2025),
 
 ## PROFESSIONAL EXPERIENCE & TECHNICAL PROJECTS
 
-### Software Developer & IT Support (Internship) | Cybercorp
-Tarija, Bolivia | 2024 - 2025
-- **Task Management System:** Designed and implemented an internal fullstack system for task assignment, tracking, and status monitoring for technical staff, optimizing response times and operational visibility.
-- **Data Modeling:** Structured the relational database to manage users, roles, support tickets, and service SLA compliance metrics.
-- **Infrastructure & Physical/Digital Security:** Planned and deployed video surveillance and IP/CCTV security camera systems with network configuration, storage, and secure local and remote access.
-- **Technologies:** C# / .NET, SQL Server, JavaScript, TCP/IP Networks, CCTV Security Systems.
+### Software Architect & Fullstack Developer | "Lugares Ocultos de Tarija" (Hidden Gems of Tarija)
+Tarija, Bolivia | December 2025 - Present (10 mos)
+- **End-to-End Mobile App:** Designed and developed a tourism cross-platform mobile application (React Native / Expo) connected to a scalable cloud backend for destination geolocation, trail mapping, and local gastronomy.
+- **Geospatial Data Modeling:** Database modeling and query optimization in PostgreSQL (PostGIS) for geospatial radius queries and efficient multimedia storage.
+- **Layered Architecture:** Implemented layered architecture patterns (FSD / Atomic Design) to ensure modularity, 100% offline navigation, and long-term maintainability.
+- **Technologies:** React Native, Expo SDK 54, PostgreSQL, Supabase, MapLibre GL, PostGIS, TypeScript.
 
 ---
 
 ### Computerized Information Systems Technician | Departmental Electoral Tribunal (TED Tarija)
-Tarija, Bolivia | August 2025
-- Administered and operated the computerized information system for data validation during the 2025 National Elections (ODS N 424/2025).
-- Real-time verification of electoral data, determining voter eligibility status, and resolving discrepancies in voter registration records.
-- First-level technical support for citizen guidance and referral of special cases according to electoral regulations.
+Tarija, Bolivia | August 2025 (1 mo)
+- **Electoral System Operation:** Administered and operated the computerized information system for data validation during the 2025 National Elections (ODS N 424/2025).
+- **Data Verification:** Real-time verification of electoral data, determining voter eligibility status, and resolving discrepancies in voter registration records under high scrutiny.
+- **Support & Compliance:** First-level technical support for citizen guidance and referral of special cases according to electoral regulations.
+- **Technologies:** Real-Time Validation, Database Operations, Incident Response, Electoral Systems.
 
 ---
 
-### Software Architect & Fullstack Developer | "Lugares Ocultos de Tarija" (Hidden Gems of Tarija)
-December 2025 - Present
-- End-to-end design and development of a tourism mobile application (React Native / Expo) connected to a scalable backend for destination geolocation, routes, and gastronomy.
-- Database modeling and optimization in PostgreSQL for geospatial queries and efficient multimedia content storage.
-- Implementation of layered architecture patterns to ensure long-term modularity and maintainability.
+### Software Developer & IT Support (Internship) | CYBERCORP S.R.L.
+Tarija, Bolivia | January 2025 - February 2025 (2 mos)
+- **Task Management System:** Designed and implemented an internal fullstack system for task assignment, tracking, and status monitoring for technical staff, optimizing response times and operational visibility.
+- **Data Modeling:** Structured the relational and NoSQL database to manage users, roles, support tickets, and service SLA compliance metrics.
+- **Infrastructure & Physical/Digital Security:** Planned and deployed video surveillance and IP/CCTV security camera systems with network configuration, storage, and secure local and remote access.
+- **Technologies:** React, Firebase Firestore, C# / .NET, SQL Server, JavaScript, TCP/IP Networks, CCTV Security Systems.
 
 ---
 
 ### Game & Logic Developer | "Dino Game" (EZ Team)
 June 2024 - August 2024
-- Development of a 2D/3D Android game using Unity and C#, applying SOLID principles and Object-Oriented Programming (OOP).
-- Mobile performance optimization (memory management, collision physics, and smooth 60 FPS rendering).
+- **Mobile Game Development:** Development of a 2D/3D Android game using Unity and C#, applying SOLID principles and Object-Oriented Programming (OOP).
+- **Performance Optimization:** Mobile performance optimization (memory management, collision physics, and smooth 60 FPS rendering).
+- **National Stage Qualification:** Qualified to the second national elimination round of the educational gaming competition.
 
 ---
 

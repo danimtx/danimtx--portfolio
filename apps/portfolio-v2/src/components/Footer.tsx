@@ -1,11 +1,22 @@
-import React from 'react';
-import { ArrowUpRight, Mail, Phone, FileText } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowUpRight, Mail, Phone, FileText, Copy, Check } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { translations } from '../i18n/translations';
 
 export const Footer: React.FC = () => {
   const { lang, cvUrl } = useLanguage();
   const t = translations[lang].footer;
+  const [copiedItem, setCopiedItem] = useState<'email' | 'phone' | null>(null);
+
+  const handleCopy = (text: string, item: 'email' | 'phone') => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      setCopiedItem(item);
+      window.setTimeout(() => {
+        setCopiedItem(null);
+      }, 2000);
+    }
+  };
 
   return (
     <footer id="contacto" className="w-full px-4 sm:px-6 lg:px-10 py-12 md:py-20">
@@ -48,26 +59,64 @@ export const Footer: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-2">
             <div className="space-y-1">
               <p className="text-xs text-neutral-400 uppercase tracking-wider font-semibold">{t.emailLabel}</p>
-              <a
-                href="mailto:danimtx03@gmail.com"
-                className="text-sm font-bold text-white hover:text-[#D4F014] transition-colors flex items-center gap-1.5"
-              >
-                <Mail className="w-3.5 h-3.5 text-[#D4F014]" />
-                <span>danimtx03@gmail.com</span>
-              </a>
+              <div className="flex items-center gap-2">
+                <a
+                  href="mailto:danimtx03@gmail.com"
+                  className="text-sm font-bold text-white hover:text-[#D4F014] transition-colors flex items-center gap-1.5"
+                >
+                  <Mail className="w-3.5 h-3.5 text-[#D4F014]" />
+                  <span>danimtx03@gmail.com</span>
+                </a>
+                <button
+                  onClick={() => handleCopy('danimtx03@gmail.com', 'email')}
+                  title={lang === 'es' ? 'Copiar email' : 'Copy email'}
+                  className="relative p-1 rounded-md bg-white/5 hover:bg-white/10 text-neutral-400 hover:text-white transition-all apple-press cursor-pointer"
+                  aria-label="Copy email"
+                >
+                  {copiedItem === 'email' ? (
+                    <Check className="w-3.5 h-3.5 text-[#D4F014]" />
+                  ) : (
+                    <Copy className="w-3.5 h-3.5" />
+                  )}
+                  {copiedItem === 'email' && (
+                    <span className="absolute -top-7 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-md bg-[#D4F014] text-black text-[10px] font-extrabold whitespace-nowrap shadow-lg animate-in fade-in zoom-in-90 duration-150 z-20">
+                      {lang === 'es' ? '¡Copiado!' : 'Copied!'}
+                    </span>
+                  )}
+                </button>
+              </div>
             </div>
 
             <div className="space-y-1">
               <p className="text-xs text-neutral-400 uppercase tracking-wider font-semibold">{t.phoneLabel}</p>
-              <a
-                href="https://wa.me/59171168130"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm font-bold text-white hover:text-[#D4F014] transition-colors flex items-center gap-1.5"
-              >
-                <Phone className="w-3.5 h-3.5 text-[#D4F014]" />
-                <span>+591 71168130</span>
-              </a>
+              <div className="flex items-center gap-2">
+                <a
+                  href="https://wa.me/59171168130"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-bold text-white hover:text-[#D4F014] transition-colors flex items-center gap-1.5"
+                >
+                  <Phone className="w-3.5 h-3.5 text-[#D4F014]" />
+                  <span>+591 71168130</span>
+                </a>
+                <button
+                  onClick={() => handleCopy('+59171168130', 'phone')}
+                  title={lang === 'es' ? 'Copiar teléfono' : 'Copy phone'}
+                  className="relative p-1 rounded-md bg-white/5 hover:bg-white/10 text-neutral-400 hover:text-white transition-all apple-press cursor-pointer"
+                  aria-label="Copy phone"
+                >
+                  {copiedItem === 'phone' ? (
+                    <Check className="w-3.5 h-3.5 text-[#D4F014]" />
+                  ) : (
+                    <Copy className="w-3.5 h-3.5" />
+                  )}
+                  {copiedItem === 'phone' && (
+                    <span className="absolute -top-7 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-md bg-[#D4F014] text-black text-[10px] font-extrabold whitespace-nowrap shadow-lg animate-in fade-in zoom-in-90 duration-150 z-20">
+                      {lang === 'es' ? '¡Copiado!' : 'Copied!'}
+                    </span>
+                  )}
+                </button>
+              </div>
             </div>
 
             <div className="space-y-1">

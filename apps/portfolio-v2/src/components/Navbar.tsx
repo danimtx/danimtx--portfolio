@@ -239,10 +239,10 @@ export const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer with Apple Frosted Glass */}
       {mobileOpen && (
-        <div className="lg:hidden mt-3 p-4 rounded-2xl bg-white border border-neutral-200 shadow-xl flex flex-col gap-2 animate-in fade-in slide-in-from-top-2 duration-200">
-          <div className="flex items-center justify-between pb-2 border-b border-neutral-100">
+        <div className="lg:hidden mt-3 p-5 rounded-3xl bg-white/95 backdrop-blur-2xl border border-neutral-200/90 shadow-2xl flex flex-col gap-2.5 animate-in fade-in zoom-in-95 duration-200">
+          <div className="flex items-center justify-between pb-3 border-b border-neutral-100">
             <span className="text-xs font-bold text-neutral-500 uppercase tracking-wider flex items-center gap-1.5">
               <Globe className="w-3.5 h-3.5" />
               <span>Idioma / Language</span>
@@ -250,14 +250,14 @@ export const Navbar: React.FC = () => {
             <div className="flex items-center p-0.5 rounded-full bg-neutral-100 border border-neutral-200 text-xs font-bold">
               <button
                 onClick={() => setLang('en')}
-                className={`px-3 py-1 rounded-full transition-all ${lang === 'en' ? 'bg-[#101010] text-[#D4F014]' : 'text-neutral-600'
+                className={`px-3 py-1 rounded-full transition-all apple-press cursor-pointer ${lang === 'en' ? 'bg-[#101010] text-[#D4F014] shadow-xs' : 'text-neutral-600 hover:text-black'
                   }`}
               >
                 EN
               </button>
               <button
                 onClick={() => setLang('es')}
-                className={`px-3 py-1 rounded-full transition-all ${lang === 'es' ? 'bg-[#101010] text-[#D4F014]' : 'text-neutral-600'
+                className={`px-3 py-1 rounded-full transition-all apple-press cursor-pointer ${lang === 'es' ? 'bg-[#101010] text-[#D4F014] shadow-xs' : 'text-neutral-600 hover:text-black'
                   }`}
               >
                 ES
@@ -265,34 +265,39 @@ export const Navbar: React.FC = () => {
             </div>
           </div>
 
-          {navItems.map((item) => {
-            const isActive = activeSection === item.id;
-            return (
-              <a
-                key={item.id}
-                href={`#${item.id}`}
-                onClick={(e) => {
-                  handleNavClick(e, item.id);
-                  setMobileOpen(false);
-                }}
-                className={`px-3 py-2 rounded-xl text-sm font-semibold transition-all apple-press ${isActive
-                    ? 'bg-[#D4F014] text-black'
-                    : 'text-neutral-600 hover:bg-neutral-50'
-                  }`}
-              >
-                {item.label}
-              </a>
-            );
-          })}
+          <div className="flex flex-col gap-1 py-1">
+            {navItems.map((item) => {
+              const isActive = activeSection === item.id;
+              return (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  onClick={(e) => {
+                    handleNavClick(e, item.id);
+                    setMobileOpen(false);
+                  }}
+                  className={`px-3.5 py-2.5 rounded-2xl text-sm font-semibold transition-all apple-press flex items-center justify-between ${isActive
+                      ? 'bg-[#101010] text-[#D4F014] font-bold shadow-xs'
+                      : 'text-neutral-700 hover:bg-neutral-100/80 hover:text-black'
+                    }`}
+                >
+                  <span>{item.label}</span>
+                  {isActive && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#D4F014]"></span>
+                  )}
+                </a>
+              );
+            })}
+          </div>
 
           <a
             href={cvUrl}
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setMobileOpen(false)}
-            className="mt-2 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-neutral-900 text-white text-xs font-semibold"
+            className="mt-2 flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-[#101010] text-[#D4F014] text-xs font-bold transition-all apple-press shadow-md"
           >
-            <FileText className="w-3.5 h-3.5" />
+            <FileText className="w-4 h-4" />
             <span>{t.cv}</span>
           </a>
         </div>

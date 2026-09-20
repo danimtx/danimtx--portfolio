@@ -133,6 +133,29 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
+/* Stealth Cat Ambient 3D Float (for Mobile & Idle Desktop) */
+@keyframes heroCatFloat {
+  0%, 100% {
+    transform: translateY(0px) rotateX(0deg) rotateY(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotateX(3deg) rotateY(-2.5deg);
+  }
+}
+
+.animate-cat-float {
+  animation: heroCatFloat 6.5s ease-in-out infinite;
+}
+
+/* Hide scrollbars for clean horizontal chip scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* Accessibility: Strict Prefers Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -143,7 +166,9 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  .animate-cat-eyes {
+  .animate-cat-eyes,
+  .animate-cat-float {
     animation: none !important;
   }
 }
+

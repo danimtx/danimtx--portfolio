@@ -26,28 +26,30 @@ Doble finalista regional en el ACM-ICPC South America Finals (2024 y 2025), con 
 
 ## EXPERIENCIA PROFESIONAL Y PROYECTOS TECNICOS
 
-### Desarrollador de Software & Soporte TI (Practicas) | Cybercorp
-Tarija, Bolivia | 2024 - 2025
-- Sistema de Gestion de Tareas: Disene e implemente un sistema interno fullstack para la asignacion, seguimiento y control de estado de tareas del personal tecnico, optimizando los tiempos de respuesta y visibilidad operativa.
-- Modelado de Datos: Estructure la base de datos relacional para gestionar usuarios, roles, tickets de soporte y metricas de cumplimiento de servicios.
-- Infraestructura y Seguridad Fisica/Digital: Planifique e instale sistemas de videovigilancia y camaras de seguridad IP/CCTV con configuracion de red, almacenamiento y acceso seguro en red local y remota.
-- Tecnologias: C# / .NET, SQL Server, JavaScript, Redes TCP/IP, Sistemas de Seguridad CCTV.
+### Arquitecto de Software & Desarrollador Fullstack | "Lugares Ocultos de Tarija"
+Tarija, Bolivia | Diciembre 2025 - Presente (10 meses)
+- Diseno integral y desarrollo de una aplicacion movil turistica en React Native (Expo) conectada a un backend escalable para geolocalizacion de destinos, rutas y gastronomia.
+- Modelado y optimizacion de base de datos en PostgreSQL (PostGIS) para consultas geoespaciales y almacenamiento eficiente de contenido multimedia.
+- Implementacion de patrones de arquitectura por capas (FSD / Atomic Design) para garantizar modularidad, modo offline y mantenibilidad a largo plazo.
+- Tecnologias: React Native, Expo SDK 54, PostgreSQL, Supabase, MapLibre GL, PostGIS, TypeScript.
 
 ---
 
 ### Tecnico de Informacion Computarizada | Tribunal Electoral Departamental (TED Tarija)
-Tarija, Bolivia | Agosto 2025
+Tarija, Bolivia | Agosto 2025 (1 mes)
 - Administracion y operacion del sistema de informacion computarizado para la validacion de datos durante las Elecciones Nacionales 2025 (ODS N 424/2025).
 - Verificacion de datos electorales en tiempo real, determinando estados de habilitacion y resolviendo discrepancias en el registro de votantes.
 - Soporte tecnico de primer nivel para la orientacion ciudadana y derivacion de casos especiales segun normativa electoral.
+- Tecnologias: Validacion en Tiempo Real, Operacion de Bases de Datos, Respuesta a Incidentes, Sistemas Electorales.
 
 ---
 
-### Arquitecto de Software & Desarrollador Fullstack | "Lugares Ocultos de Tarija"
-Diciembre 2025 - Presente
-- Diseno integral y desarrollo de una aplicacion movil turistica (React Native / Expo) conectada a un backend escalable para geolocalizacion de destinos, rutas y gastronomia.
-- Modelado y optimizacion de base de datos en PostgreSQL para consultas geoespaciales y almacenamiento eficiente de contenido multimedia.
-- Implementacion de patrones de arquitectura por capas para garantizar modularidad y mantenibilidad a largo plazo.
+### Desarrollador de Software & Soporte TI (Practicas) | CYBERCORP S.R.L.
+Tarija, Bolivia | Enero 2025 - Febrero 2025 (2 meses)
+- Sistema de Gestion de Tareas: Disene e implemente un sistema interno fullstack para la asignacion, seguimiento y control de estado de tareas del personal tecnico, optimizando los tiempos de respuesta y visibilidad operativa.
+- Modelado de Datos: Estructure la base de datos relacional y NoSQL para gestionar usuarios, roles, tickets de soporte y metricas de cumplimiento de servicios.
+- Infraestructura y Seguridad Fisica/Digital: Planifique e instale sistemas de videovigilancia y camaras de seguridad IP/CCTV con configuracion de red, almacenamiento y acceso seguro en red local y remota.
+- Tecnologias: React, Firebase Firestore, C# / .NET, SQL Server, JavaScript, Redes TCP/IP, Sistemas de Seguridad CCTV.
 
 ---
 
@@ -55,6 +57,7 @@ Diciembre 2025 - Presente
 Junio 2024 - Agosto 2024
 - Desarrollo de videojuego 2D/3D para Android utilizando Unity y C#, aplicando principios SOLID y programacion orientada a objetos.
 - Optimizacion de rendimiento movil (gestion de memoria, fisicas de colision y renderizado fluido a 60 FPS).
+- Clasificacion a la segunda ronda nacional eliminatoria del concurso educativo.
 
 ---
 

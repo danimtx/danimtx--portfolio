@@ -15,6 +15,14 @@ export const CompetitiveHighlight: React.FC = () => {
     e.currentTarget.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
   };
 
+  const handleSpotlightTouch = (e: React.TouchEvent<HTMLElement>) => {
+    if (e.touches.length === 0) return;
+    const touch = e.touches[0];
+    const rect = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty('--mouse-x', `${touch.clientX - rect.left}px`);
+    e.currentTarget.style.setProperty('--mouse-y', `${touch.clientY - rect.top}px`);
+  };
+
   return (
     <section id="icpc" className="w-full px-4 sm:px-6 lg:px-10 py-16 md:py-24">
       <div className="max-w-7xl mx-auto space-y-12">
@@ -39,6 +47,7 @@ export const CompetitiveHighlight: React.FC = () => {
           {/* Main Editorial Achievement Card */}
           <div
             onMouseMove={handleSpotlight}
+            onTouchMove={handleSpotlightTouch}
             className="apple-spotlight apple-spotlight-inner lg:col-span-7 rounded-[32px] bg-[#101010] text-white p-8 sm:p-12 flex flex-col justify-between space-y-8 shadow-xl"
           >
             <div className="space-y-4">
@@ -94,6 +103,7 @@ export const CompetitiveHighlight: React.FC = () => {
             {/* Interactive Certificate Card with Tabs */}
             <div
               onMouseMove={handleSpotlight}
+              onTouchMove={handleSpotlightTouch}
               className="apple-spotlight apple-spotlight-inner bg-white rounded-[32px] p-6 border border-neutral-200 shadow-md space-y-4"
             >
               
@@ -127,24 +137,26 @@ export const CompetitiveHighlight: React.FC = () => {
                 </span>
               </div>
 
-              {/* Certificate Image Display */}
+              {/* Certificate Image Display with Smooth Cross-fade */}
               <div className="rounded-2xl overflow-hidden border border-neutral-200 bg-neutral-50 aspect-video relative group shadow-inner">
-                {activeCert === 'icpc' ? (
-                  <img
-                    src="/certificados/ICPC-2025.webp"
-                    alt="Official ICPC 2025 Certificate"
-                    className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = '/certificados/ICPC-2025.jpeg';
-                    }}
-                  />
-                ) : (
-                  <img
-                    src="/certificados/ieee18.png"
-                    alt="Official IEEEXtreme 18.0 Certificate"
-                    className="w-full h-full object-contain object-center p-2 bg-white transition-transform duration-300 group-hover:scale-105"
-                  />
-                )}
+                <div key={activeCert} className="w-full h-full animate-in fade-in duration-300">
+                  {activeCert === 'icpc' ? (
+                    <img
+                      src="/certificados/ICPC-2025.webp"
+                      alt="Official ICPC 2025 Certificate"
+                      className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '/certificados/ICPC-2025.jpeg';
+                      }}
+                    />
+                  ) : (
+                    <img
+                      src="/certificados/ieee18.png"
+                      alt="Official IEEEXtreme 18.0 Certificate"
+                      className="w-full h-full object-contain object-center p-2 bg-white transition-transform duration-300 group-hover:scale-105"
+                    />
+                  )}
+                </div>
               </div>
 
               <div className="space-y-1">

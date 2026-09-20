@@ -25,6 +25,14 @@ export const ServicesAccordion: React.FC = () => {
     e.currentTarget.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
   };
 
+  const handleSpotlightTouch = (e: React.TouchEvent<HTMLElement>) => {
+    if (e.touches.length === 0) return;
+    const touch = e.touches[0];
+    const rect = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty('--mouse-x', `${touch.clientX - rect.left}px`);
+    e.currentTarget.style.setProperty('--mouse-y', `${touch.clientY - rect.top}px`);
+  };
+
   return (
     <section id="servicios" className="w-full px-4 sm:px-6 lg:px-10 py-12 md:py-20">
       <div className="max-w-7xl mx-auto space-y-12">
@@ -56,6 +64,7 @@ export const ServicesAccordion: React.FC = () => {
                   key={service.id}
                   onClick={() => setActiveId(service.id)}
                   onMouseMove={handleSpotlight}
+                  onTouchMove={handleSpotlightTouch}
                   className={`group apple-spotlight apple-spotlight-inner apple-press p-6 rounded-3xl cursor-pointer transition-all duration-300 border ${
                     isActive
                       ? 'bg-[#101010] text-white border-black shadow-xl'
@@ -104,6 +113,7 @@ export const ServicesAccordion: React.FC = () => {
           {/* Right Column: Active Service Deep Dive Card */}
           <div
             onMouseMove={handleSpotlight}
+            onTouchMove={handleSpotlightTouch}
             className="apple-spotlight apple-spotlight-inner lg:col-span-6 bg-white rounded-3xl p-6 sm:p-8 border border-neutral-200/90 shadow-lg sticky top-24 space-y-6"
           >
             <div className="flex items-center justify-between border-b border-neutral-100 pb-4">

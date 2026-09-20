@@ -21,6 +21,14 @@ export const ProjectsShowcase: React.FC = () => {
     e.currentTarget.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
   };
 
+  const handleSpotlightTouch = (e: React.TouchEvent<HTMLElement>) => {
+    if (e.touches.length === 0) return;
+    const touch = e.touches[0];
+    const rect = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty('--mouse-x', `${touch.clientX - rect.left}px`);
+    e.currentTarget.style.setProperty('--mouse-y', `${touch.clientY - rect.top}px`);
+  };
+
   return (
     <section id="proyectos" className="w-full px-4 sm:px-6 lg:px-10 py-12 md:py-24 bg-[#F2F2EE]">
       <div className="max-w-7xl mx-auto space-y-12">
@@ -63,6 +71,7 @@ export const ProjectsShowcase: React.FC = () => {
             <article
               key={project.id}
               onMouseMove={handleSpotlight}
+              onTouchMove={handleSpotlightTouch}
               className="apple-spotlight apple-spotlight-inner bg-white rounded-[32px] p-6 sm:p-10 lg:p-12 border border-neutral-200/90 shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:border-neutral-300"
             >
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
@@ -182,8 +191,8 @@ export const ProjectsShowcase: React.FC = () => {
                       {project.category}
                     </div>
 
-                    <div className="absolute bottom-4 right-4 px-3 py-1.5 rounded-full bg-[#D4F014] text-black text-xs font-extrabold shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1">
-                      <span>{lang === 'es' ? 'Abrir Ficha' : 'Expand'}</span>
+                    <div className="absolute bottom-4 right-4 px-3 py-1.5 rounded-full bg-[#D4F014] text-black text-xs font-extrabold shadow-lg opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1">
+                      <span>{lang === 'es' ? 'Abrir Ficha' : 'Expand Specs'}</span>
                       <ArrowUpRight className="w-3 h-3" />
                     </div>
                   </div>

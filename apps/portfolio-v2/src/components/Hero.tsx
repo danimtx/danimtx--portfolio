@@ -24,6 +24,19 @@ export const Hero: React.FC = () => {
     setTilt({ x: rotateX, y: rotateY });
   };
 
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!emblemRef.current || e.touches.length === 0) return;
+    const touch = e.touches[0];
+    const rect = emblemRef.current.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateY = ((x - centerX) / centerX) * 16;
+    const rotateX = -((y - centerY) / centerY) * 16;
+    setTilt({ x: rotateX, y: rotateY });
+  };
+
   const handleMouseEnter = () => {
     setIsHovered(true);
   };
@@ -33,54 +46,63 @@ export const Hero: React.FC = () => {
     setTilt({ x: 0, y: 0 });
   };
 
+  const handleTouchStart = () => {
+    setIsHovered(true);
+  };
+
+  const handleTouchEnd = () => {
+    setIsHovered(false);
+    setTilt({ x: 0, y: 0 });
+  };
+
   return (
-    <section id="hero" className="w-full px-4 sm:px-6 lg:px-10 pt-2 pb-12">
+    <section id="hero" className="w-full px-3.5 sm:px-6 lg:px-10 pt-2 pb-10 sm:pb-12">
       <div className="max-w-7xl mx-auto">
         {/* Main Hero Card */}
-        <div className="relative w-full rounded-[32px] md:rounded-[40px] bg-[#101010] text-white overflow-hidden shadow-2xl border border-white/5 min-h-[620px] flex flex-col justify-between p-6 sm:p-10 lg:p-14">
+        <div className="relative w-full rounded-[28px] sm:rounded-[36px] md:rounded-[40px] bg-[#101010] text-white overflow-hidden shadow-2xl border border-white/5 min-h-[520px] sm:min-h-[620px] flex flex-col justify-between p-5 sm:p-10 lg:p-14">
           
           {/* Top Bar inside Card: Greeting & Floating Tech Badge */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 z-20">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 z-20">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md w-fit">
               <span className="text-[#D4F014] text-xs font-bold tracking-wider">Hey 👋</span>
               <span className="text-neutral-200 text-xs font-semibold">danimtx</span>
             </div>
 
-            {/* Floating Glass Pill: Stack Overview */}
-            <div className="flex flex-wrap items-center gap-2 px-3.5 py-2 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md shadow-inner text-xs">
-              <span className="text-neutral-400 font-semibold tracking-wider uppercase text-[10px] mr-1">
+            {/* Floating Glass Pill: Stack Overview with responsive touch scroll */}
+            <div className="flex flex-wrap sm:flex-nowrap items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md shadow-inner text-xs max-w-full overflow-x-auto no-scrollbar">
+              <span className="text-neutral-400 font-semibold tracking-wider uppercase text-[9px] sm:text-[10px] mr-1 shrink-0">
                 {t.stackLabel}
               </span>
-              <div className="flex flex-wrap items-center gap-1.5">
-                <span className="px-2.5 py-1 rounded-md bg-white/10 text-white font-medium text-[11px] apple-press">.NET (C#)</span>
-                <span className="px-2.5 py-1 rounded-md bg-white/10 text-white font-medium text-[11px] apple-press">NestJS</span>
-                <span className="px-2.5 py-1 rounded-md bg-white/10 text-white font-medium text-[11px] apple-press">React</span>
-                <span className="px-2.5 py-1 rounded-md bg-white/10 text-white font-medium text-[11px] apple-press">React Native (Expo)</span>
-                <span className="px-2.5 py-1 rounded-md bg-white/10 text-white font-medium text-[11px] apple-press">Angular</span>
+              <div className="flex flex-wrap sm:flex-nowrap items-center gap-1 sm:gap-1.5 shrink-0">
+                <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-white/10 text-white font-medium text-[10.5px] sm:text-[11px] apple-press">.NET (C#)</span>
+                <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-white/10 text-white font-medium text-[10.5px] sm:text-[11px] apple-press">NestJS</span>
+                <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-white/10 text-white font-medium text-[10.5px] sm:text-[11px] apple-press">React</span>
+                <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-white/10 text-white font-medium text-[10.5px] sm:text-[11px] apple-press">React Native (Expo)</span>
+                <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-white/10 text-white font-medium text-[10.5px] sm:text-[11px] apple-press">Angular</span>
               </div>
             </div>
           </div>
 
           {/* Main Grid: Copy Left & Stealth Brand Centerpiece Right */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center my-auto pt-6 pb-4 z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center my-auto pt-4 sm:pt-6 pb-4 z-10">
             
             {/* Left Column: Headlines & CTA */}
-            <div className="lg:col-span-7 flex flex-col items-start gap-6 max-w-2xl">
-              <div className="space-y-3">
-                <h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-extrabold tracking-tight leading-[1.08] text-white">
+            <div className="lg:col-span-7 flex flex-col items-start gap-5 sm:gap-6 max-w-2xl">
+              <div className="space-y-2.5 sm:space-y-3">
+                <h1 className="text-3xl sm:text-5xl md:text-6xl xl:text-7xl font-extrabold tracking-tight leading-[1.08] text-white">
                   {t.title1} <br />
                   <span className="text-[#D4F014]">{t.title2}</span>
                 </h1>
-                <p className="text-sm sm:text-base text-neutral-300/90 max-w-xl font-normal leading-relaxed">
+                <p className="text-xs sm:text-base text-neutral-300/90 max-w-xl font-normal leading-relaxed">
                   {t.description}
                 </p>
               </div>
 
               {/* Action Buttons with Apple Press Feedback */}
-              <div className="flex flex-wrap items-center gap-3 pt-2">
+              <div className="flex flex-wrap items-center gap-3 pt-1 sm:pt-2">
                 <a
                   href="#contacto"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#D4F014] text-black font-bold text-sm hover:bg-[#bce00e] hover:shadow-lg hover:shadow-[#D4F014]/20 transition-all duration-200 group apple-press"
+                  className="inline-flex items-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-full bg-[#D4F014] text-black font-bold text-xs sm:text-sm hover:bg-[#bce00e] hover:shadow-lg hover:shadow-[#D4F014]/20 transition-all duration-200 group apple-press"
                 >
                   <span>{t.ctaWork}</span>
                   <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -88,25 +110,28 @@ export const Hero: React.FC = () => {
 
                 <a
                   href="#proyectos"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/15 text-white font-semibold text-sm border border-white/15 backdrop-blur-md transition-all duration-200 apple-press"
+                  className="inline-flex items-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-full bg-white/10 hover:bg-white/15 text-white font-semibold text-xs sm:text-sm border border-white/15 backdrop-blur-md transition-all duration-200 apple-press"
                 >
                   <span>{t.ctaProjects}</span>
                 </a>
               </div>
             </div>
 
-            {/* Right Column: Stealth Cat Logo with 3D Spatial Parallax */}
+            {/* Right Column: Stealth Cat Logo with 3D Spatial Parallax & Touch Support */}
             <div
               ref={emblemRef}
               onMouseMove={handleMouseMove}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
               style={{ perspective: 1000 }}
-              className="lg:col-span-5 relative flex items-center justify-center py-6 lg:py-0 select-none cursor-pointer"
+              className="lg:col-span-5 relative flex items-center justify-center py-4 sm:py-6 lg:py-0 select-none cursor-pointer"
             >
               {/* Subtle ambient lime glow behind the mark */}
               <div
-                className="absolute w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full bg-[#D4F014]/14 blur-[110px] pointer-events-none transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                className="absolute w-52 h-52 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full bg-[#D4F014]/14 blur-[90px] sm:blur-[110px] pointer-events-none transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
                 style={{
                   transform: `translate(${tilt.y * 1.5}px, ${-tilt.x * 1.5}px)`,
                 }}
@@ -123,11 +148,11 @@ export const Hero: React.FC = () => {
                     : 'transform 600ms cubic-bezier(0.16, 1, 0.3, 1)',
                   transformStyle: 'preserve-3d',
                 }}
-                className="will-change-transform"
+                className={`will-change-transform ${!isHovered ? 'animate-cat-float' : ''}`}
               >
                 <svg
                   viewBox="0 0 120 120"
-                  className="relative z-10 w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 drop-shadow-[0_0_40px_rgba(212,240,20,0.25)]"
+                  className="relative z-10 w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 drop-shadow-[0_0_40px_rgba(212,240,20,0.25)]"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                   aria-label="danimtx Stealth Cat Brand Mark"
@@ -180,22 +205,22 @@ export const Hero: React.FC = () => {
           </div>
 
           {/* Bottom Row: Metrics Strip */}
-          <div className="pt-8 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-6 z-10">
-            <div className="space-y-1">
-              <p className="text-2xl sm:text-3xl font-extrabold text-white">{t.metric1Value}</p>
-              <p className="text-xs text-neutral-400 font-medium">{t.metric1Label}</p>
+          <div className="pt-6 sm:pt-8 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 z-10">
+            <div className="space-y-0.5 sm:space-y-1">
+              <p className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight">{t.metric1Value}</p>
+              <p className="text-[11px] sm:text-xs text-neutral-400 font-medium">{t.metric1Label}</p>
             </div>
-            <div className="space-y-1">
-              <p className="text-2xl sm:text-3xl font-extrabold text-[#D4F014]">{t.metric2Value}</p>
-              <p className="text-xs text-neutral-400 font-medium">{t.metric2Label}</p>
+            <div className="space-y-0.5 sm:space-y-1">
+              <p className="text-xl sm:text-2xl md:text-3xl font-extrabold text-[#D4F014] tracking-tight">{t.metric2Value}</p>
+              <p className="text-[11px] sm:text-xs text-neutral-400 font-medium">{t.metric2Label}</p>
             </div>
-            <div className="space-y-1">
-              <p className="text-2xl sm:text-3xl font-extrabold text-white">{t.metric3Value}</p>
-              <p className="text-xs text-neutral-400 font-medium">{t.metric3Label}</p>
+            <div className="space-y-0.5 sm:space-y-1">
+              <p className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight">{t.metric3Value}</p>
+              <p className="text-[11px] sm:text-xs text-neutral-400 font-medium">{t.metric3Label}</p>
             </div>
-            <div className="space-y-1">
-              <p className="text-2xl sm:text-3xl font-extrabold text-[#D4F014]">{t.metric4Value}</p>
-              <p className="text-xs text-neutral-400 font-medium">{t.metric4Label}</p>
+            <div className="space-y-0.5 sm:space-y-1">
+              <p className="text-xl sm:text-2xl md:text-3xl font-extrabold text-[#D4F014] tracking-tight">{t.metric4Value}</p>
+              <p className="text-[11px] sm:text-xs text-neutral-400 font-medium">{t.metric4Label}</p>
             </div>
           </div>
 

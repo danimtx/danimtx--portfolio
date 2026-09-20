@@ -14,6 +14,14 @@ export const ExperienceSection: React.FC = () => {
     e.currentTarget.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
   };
 
+  const handleSpotlightTouch = (e: React.TouchEvent<HTMLElement>) => {
+    if (e.touches.length === 0) return;
+    const touch = e.touches[0];
+    const rect = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty('--mouse-x', `${touch.clientX - rect.left}px`);
+    e.currentTarget.style.setProperty('--mouse-y', `${touch.clientY - rect.top}px`);
+  };
+
   return (
     <section id="experiencia" className="w-full px-4 sm:px-6 lg:px-10 py-16 md:py-24 bg-white border-b border-neutral-200">
       <div className="max-w-7xl mx-auto space-y-12">
@@ -33,14 +41,27 @@ export const ExperienceSection: React.FC = () => {
           </p>
         </div>
 
-        {/* Timeline Grid (Apple-Style Minimalist Cards) */}
-        <div className="space-y-6">
+        {/* Timeline Grid with Vertical Connecting Rail */}
+        <div className="relative pl-6 sm:pl-10 space-y-8 before:absolute before:left-[11px] sm:before:left-[15px] before:top-8 before:bottom-8 before:w-[2px] before:bg-gradient-to-b before:from-[#D4F014] before:via-neutral-300 before:to-neutral-200">
           {t.items.map((item, index) => (
             <div
               key={item.id}
               onMouseMove={handleSpotlight}
+              onTouchMove={handleSpotlightTouch}
               className="apple-spotlight apple-spotlight-inner relative p-6 sm:p-8 lg:p-10 rounded-3xl bg-[#F8F8F6] border border-neutral-200/80 hover:border-neutral-300 hover:bg-neutral-50/90 transition-all duration-300 hover:shadow-xl group"
             >
+              {/* Timeline Node Marker */}
+              <div className="absolute -left-[30px] sm:-left-[41px] top-8 sm:top-10 flex items-center justify-center">
+                {index === 0 ? (
+                  <span className="relative flex h-4 w-4">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D4F014] opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-4 w-4 bg-[#D4F014] border-2 border-[#101010] shadow-[0_0_10px_#D4F014]"></span>
+                  </span>
+                ) : (
+                  <span className="w-3.5 h-3.5 rounded-full bg-neutral-300 border-2 border-white shadow-xs"></span>
+                )}
+              </div>
+
               <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
                 
                 {/* Left Header: Role & Organization */}
