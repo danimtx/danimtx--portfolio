@@ -30,7 +30,7 @@ export const IntroStatement: React.FC = () => {
           </p>
 
           <a
-            href="#servicios"
+            href="#experiencia"
             className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#111111] hover:text-black group border-b-2 border-black pb-0.5"
           >
             <span>{t.linkText}</span>

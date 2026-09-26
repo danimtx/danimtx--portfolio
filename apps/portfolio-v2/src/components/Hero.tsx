@@ -74,11 +74,12 @@ export const Hero: React.FC = () => {
                 {t.stackLabel}
               </span>
               <div className="flex flex-wrap sm:flex-nowrap items-center gap-1 sm:gap-1.5 shrink-0">
-                <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-white/10 text-white font-medium text-[10.5px] sm:text-[11px] apple-press">.NET (C#)</span>
-                <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-white/10 text-white font-medium text-[10.5px] sm:text-[11px] apple-press">NestJS</span>
-                <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-white/10 text-white font-medium text-[10.5px] sm:text-[11px] apple-press">React</span>
+                <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-white/10 text-white font-medium text-[10.5px] sm:text-[11px] apple-press">.NET 10 (C#)</span>
+                <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-white/10 text-[#D4F014] font-medium text-[10.5px] sm:text-[11px] apple-press">Azure Cloud & DevOps</span>
+                <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-white/10 text-white font-medium text-[10.5px] sm:text-[11px] apple-press">Docker</span>
+                <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-white/10 text-white font-medium text-[10.5px] sm:text-[11px] apple-press">PostgreSQL / PostGIS</span>
                 <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-white/10 text-white font-medium text-[10.5px] sm:text-[11px] apple-press">React Native (Expo)</span>
-                <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-white/10 text-white font-medium text-[10.5px] sm:text-[11px] apple-press">Angular</span>
+                <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-white/10 text-white font-medium text-[10.5px] sm:text-[11px] apple-press">React / Angular</span>
               </div>
             </div>
           </div>

@@ -4,7 +4,6 @@ import { ScrollProgressBar } from './components/ScrollProgressBar';
 import { Hero } from './components/Hero';
 import { IntroStatement } from './components/IntroStatement';
 import { ExperienceSection } from './components/ExperienceSection';
-import { ServicesAccordion } from './components/ServicesAccordion';
 import { ProjectsShowcase } from './components/ProjectsShowcase';
 import { CompetitiveHighlight } from './components/CompetitiveHighlight';
 import { ProcessSection } from './components/ProcessSection';
@@ -20,7 +19,6 @@ export default function App() {
           <Hero />
           <IntroStatement />
           <ExperienceSection />
-          <ServicesAccordion />
           <ProjectsShowcase />
           <CompetitiveHighlight />
           <ProcessSection />

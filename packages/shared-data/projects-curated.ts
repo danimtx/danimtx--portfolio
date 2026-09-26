@@ -495,6 +495,29 @@ export const CURATED_PROJECTS: CuratedProject[] = CURATED_PROJECTS_ES;
    ========================================================================= */
 export const CURATED_EXPERIENCE_ES: CuratedExperience[] = [
   {
+    id: 'io-gama',
+    role: 'Desarrollador de Software Backend',
+    company: 'IO Gama Construcciones',
+    type: 'Presupuestación ERP · Microservicios',
+    period: 'Dic. 2025 - Mayo 2026 · 6 meses',
+    location: 'Tarija, Bolivia',
+    bullets: [
+      'Diseño de arquitectura desacoplada con .NET 10 Web API bajo Clean Architecture, implementando API Gateway perimetral y microservicios con autenticación JWT y RBAC.',
+      'Implementación del motor de cálculo paramétrico para cómputo de costos directos e indirectos de obra (materiales, mano de obra, cargas sociales e impuestos) con persistencia en PostgreSQL.',
+      'Definición de contratos de integración estandarizados con OpenAPI / Swagger para comunicación fluida con el frontend (React) y despliegue contenerizado.'
+    ],
+    stack: [
+      '.NET 10',
+      'C#',
+      'ASP.NET Core',
+      'Clean Architecture',
+      'CQRS',
+      'PostgreSQL',
+      'OpenAPI / Swagger',
+      'Docker'
+    ]
+  },
+  {
     id: 'lugares-ocultos',
     role: 'Desarrollador Fullstack & Móvil',
     company: 'Lugares Ocultos de Tarija',
@@ -561,6 +584,29 @@ export const CURATED_EXPERIENCE_ES: CuratedExperience[] = [
    PROFESSIONAL EXPERIENCE (ENGLISH)
    ========================================================================= */
 export const CURATED_EXPERIENCE_EN: CuratedExperience[] = [
+  {
+    id: 'io-gama',
+    role: 'Backend Software Developer',
+    company: 'IO Gama Construcciones',
+    type: 'ERP Costing & Resource Management',
+    period: 'Dec. 2025 - May 2026 · 6 mos',
+    location: 'Tarija, Bolivia',
+    bullets: [
+      'Designed decoupled microservices architecture with .NET 10 Web API under Clean Architecture principles, implementing a perimeter API Gateway and secure JWT / RBAC authentication.',
+      'Implemented high-performance parametric calculation engine for direct and indirect construction cost computation (materials, labor yields, social charges, and taxes) with PostgreSQL persistence.',
+      'Standardized frontend-backend integration contracts via OpenAPI / Swagger specifications, ensuring seamless communication with the React frontend and containerized deployments.'
+    ],
+    stack: [
+      '.NET 10',
+      'C#',
+      'ASP.NET Core',
+      'Clean Architecture',
+      'CQRS',
+      'PostgreSQL',
+      'OpenAPI / Swagger',
+      'Docker'
+    ]
+  },
   {
     id: 'lugares-ocultos',
     role: 'Fullstack & Mobile Developer',

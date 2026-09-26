@@ -9,7 +9,9 @@
     "build": "npm run build:v2",
     "dev:v1": "npm run dev --workspace=portafolio-test",
     "dev:v2": "npm run dev --workspace=@portfolio/v2",
+    "dev:v3": "npm run dev --workspace=@portfolio/v3",
     "build:v1": "npm run build --workspace=portafolio-test",
-    "build:v2": "npm run build --workspace=@portfolio/v2"
+    "build:v2": "npm run build --workspace=@portfolio/v2",
+    "build:v3": "npm run build --workspace=@portfolio/v3"
   }
 }

@@ -4,7 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { translations } from '../i18n/translations';
 import { BrandLogo } from './BrandLogo';
 
-const SECTIONS = ['hero', 'experiencia', 'servicios', 'proyectos', 'icpc', 'proceso'];
+const SECTIONS = ['hero', 'experiencia', 'proyectos', 'icpc', 'proceso'];
 
 export const Navbar: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -115,7 +115,6 @@ export const Navbar: React.FC = () => {
   const navItems = [
     { id: 'hero', label: t.home },
     { id: 'experiencia', label: t.experience },
-    { id: 'servicios', label: t.services },
     { id: 'proyectos', label: t.projects },
     { id: 'icpc', label: t.icpc },
     { id: 'proceso', label: t.process },

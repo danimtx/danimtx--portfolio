@@ -50,7 +50,7 @@ export const translations = {
       greeting: "Hey 👋 I'm danimtx",
       title1: 'Software Engineer &',
       title2: 'System Architect',
-      description: 'Systems Engineer specialized in robust microservices with .NET 10, offline-first mobile apps with React Native, and high-level algorithmic problem solving as a 2x ACM-ICPC Regional Finalist.',
+      description: 'Fullstack & Backend Software Engineer specializing in scalable architectures with .NET 10, C#, and Python. Proven expertise in microservices with Clean Architecture, CQRS, Microsoft Azure Cloud deployments with CI/CD, offline-first mobile apps with React Native, and high-performance problem solving as a 2x ACM-ICPC Regional Finalist.',
       ctaWork: "Let's Work Together",
       ctaProjects: 'Explore Projects',
       stackLabel: 'Core Stack:',
@@ -67,18 +67,32 @@ export const translations = {
     },
     intro: {
       availability: 'Available for projects & full-time roles',
-      p1: 'Welcome to my portfolio! I am ',
-      boldName: 'danimtx (Daniel Mancilla)',
-      p2: ', a software engineer passionate about ',
-      boldArch: 'clean architecture and distributed systems',
-      p3: '. I combine algorithmic rigor forged in ACM-ICPC with real production solutions: from scalable microservices with .NET to offline-first mobile apps with React Native.',
-      linkText: 'Explore professional trajectory'
+      p1: 'I am ',
+      boldName: 'Daniel Mancilla (danimtx)',
+      p2: ', a Fullstack & Backend Software Engineer focused on ',
+      boldArch: 'Clean Architecture, .NET 10 microservices, and Microsoft Azure Cloud systems',
+      p3: '. I design and implement decoupled enterprise architectures with CQRS and secure REST APIs, automate CI/CD with Docker, develop offline-first mobile applications, and apply elite algorithmic problem-solving backed by being a 2x ACM-ICPC Regional Finalist.',
+      linkText: 'Explore my professional trajectory'
     },
     experience: {
       tag: 'Career & Trajectory',
       title: 'Professional Experience',
-      description: 'Proven track record designing offline-first mobile systems, mission-critical electoral validation architectures, and field operations enterprise software.',
+      description: 'Proven track record designing decoupled microservices, offline-first mobile systems, and mission-critical enterprise platforms.',
       items: [
+        {
+          id: 'io-gama',
+          role: 'Backend Software Developer',
+          company: 'IO Gama Construcciones',
+          type: 'ERP Costing & Resource Management',
+          period: 'Dec. 2025 - May 2026 · 6 mos',
+          location: 'Tarija, Bolivia',
+          bullets: [
+            'Designed decoupled microservices architecture with .NET 10 Web API under Clean Architecture principles, implementing a perimeter API Gateway and secure JWT / RBAC authentication.',
+            'Implemented high-performance parametric calculation engine for direct and indirect construction cost computation (materials, labor yields, social charges, and taxes) with PostgreSQL persistence.',
+            'Standardized frontend-backend integration contracts via OpenAPI / Swagger specifications, ensuring seamless communication with the React frontend and containerized deployments.'
+          ],
+          stack: ['.NET 10', 'C#', 'ASP.NET Core', 'Clean Architecture', 'CQRS', 'PostgreSQL', 'OpenAPI / Swagger', 'Docker']
+        },
         {
           id: 'lugares-ocultos',
           role: 'Fullstack & Mobile Developer',
@@ -463,7 +477,7 @@ export const translations = {
       greeting: 'Hey 👋 Soy danimtx',
       title1: 'Software Engineer &',
       title2: 'System Architect',
-      description: 'Ingeniero de Sistemas especializado en microservicios robustos con .NET 10, aplicaciones móviles offline-first con React Native y resolución algorítmica de alto nivel como 2x Finalista Regional del ACM-ICPC.',
+      description: 'Ingeniero de Software Fullstack & Backend especializado en arquitecturas desacopladas con .NET 10 / C# y Python, microservicios bajo Clean Architecture y CQRS, despliegues en la nube con Microsoft Azure & CI/CD, y aplicaciones móviles offline-first con React Native. Respaldado por ser 2x Finalista Regional del ACM-ICPC.',
       ctaWork: 'Trabajemos Juntos',
       ctaProjects: 'Explorar Proyectos',
       stackLabel: 'Stack Principal:',
@@ -479,19 +493,33 @@ export const translations = {
       photoBadgeSub: 'Precisión Felina & Enfoque Algorítmico'
     },
     intro: {
-      availability: 'Disponible para proyectos & empleo',
-      p1: '¡Bienvenido a mi portafolio! Soy ',
-      boldName: 'danimtx (Daniel Mancilla)',
-      p2: ', ingeniero de software apasionado por la ',
-      boldArch: 'arquitectura limpia y los sistemas distribuidos',
-      p3: '. Combino rigor algorítmico forjado en el ICPC con soluciones reales en producción: desde microservicios escalables con .NET hasta apps móviles offline-first con React Native.',
+      availability: 'Disponible para proyectos & contratación',
+      p1: 'Soy ',
+      boldName: 'Daniel Mancilla (danimtx)',
+      p2: ', Ingeniero de Software Fullstack & Backend enfocado en ',
+      boldArch: 'Clean Architecture, microservicios en .NET 10 y sistemas en la nube con Azure',
+      p3: '. Diseño e implemento soluciones empresariales desacopladas con CQRS y APIs seguras, automatizo flujos CI/CD con Docker, desarrollo aplicaciones móviles con enfoque offline-first y aplico rigor algorítmico forjado como 2x Finalista Regional del ACM-ICPC.',
       linkText: 'Conoce mi trayectoria profesional'
     },
     experience: {
       tag: 'Trayectoria Profesional',
       title: 'Experiencia Laboral',
-      description: 'Historial comprobado en desarrollo móvil offline-first, sistemas electorales de misión crítica y plataformas operativas empresariales en tiempo real.',
+      description: 'Historial comprobado en microservicios desacoplados, desarrollo móvil offline-first y plataformas operativas empresariales en tiempo real.',
       items: [
+        {
+          id: 'io-gama',
+          role: 'Desarrollador de Software Backend',
+          company: 'IO Gama Construcciones',
+          type: 'Presupuestación ERP · Microservicios',
+          period: 'Dic. 2025 - Mayo 2026 · 6 meses',
+          location: 'Tarija, Bolivia',
+          bullets: [
+            'Diseño de arquitectura desacoplada con .NET 10 Web API bajo Clean Architecture, implementando API Gateway perimetral y microservicios con autenticación JWT y RBAC.',
+            'Implementación del motor de cálculo paramétrico para cómputo de costos directos e indirectos de obra (materiales, mano de obra, cargas sociales e impuestos) con persistencia en PostgreSQL.',
+            'Definición de contratos de integración estandarizados con OpenAPI / Swagger para comunicación fluida con el frontend (React) y despliegue contenerizado.'
+          ],
+          stack: ['.NET 10', 'C#', 'ASP.NET Core', 'Clean Architecture', 'CQRS', 'PostgreSQL', 'OpenAPI / Swagger', 'Docker']
+        },
         {
           id: 'lugares-ocultos',
           role: 'Desarrollador Fullstack & Móvil',

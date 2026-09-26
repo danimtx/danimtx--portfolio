@@ -1,0 +1,154 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-display: 'Syne', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --spring-snappy: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #050505;
+    color: #D4D4D8;
+    overflow-x: hidden;
+    selection-background-color: #00F2FE;
+    selection-color: #050505;
+  }
+}
+
+/* Monolith Cyber Grid */
+.bg-grid-cyber {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+}
+
+.bg-radial-vignette {
+  background: radial-gradient(circle at 50% 30%, transparent 20%, rgba(5, 5, 5, 0.8) 70%, #050505 100%);
+}
+
+/* Titanium Platinum High-Contrast Bento Surfaces */
+.surface-titanium {
+  background: linear-gradient(165deg, #F4F4F5 0%, #D4D4D8 60%, #C4C4C8 100%);
+  color: #09090B;
+  box-shadow: 
+    0 1px 2px rgba(0, 0, 0, 0.08),
+    0 8px 32px rgba(0, 0, 0, 0.45),
+    inset 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+
+.surface-titanium-dark {
+  background: #121214;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 4px 24px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Tactical Hologram Glow & Optics */
+.glow-cyan {
+  box-shadow: 0 0 25px rgba(0, 242, 254, 0.35);
+}
+
+.glow-cyan-sm {
+  box-shadow: 0 0 12px rgba(0, 242, 254, 0.25);
+}
+
+.text-glow-cyan {
+  text-shadow: 0 0 12px rgba(0, 242, 254, 0.5);
+}
+
+.glow-emerald {
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.35);
+}
+
+/* Ghost Dual-Tone Display Typography */
+.text-ghost {
+  color: rgba(255, 255, 255, 0.28);
+  transition: color 300ms ease;
+}
+
+.group:hover .text-ghost-hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Precision Tactical Brackets */
+.bracket-tag::before {
+  content: "[ ";
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.bracket-tag::after {
+  content: " ]";
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Cyber Scanning Line */
+@keyframes cyberScan {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(400%);
+    opacity: 0;
+  }
+}
+
+.animate-scanline {
+  animation: cyberScan 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Radial Horizon Cyan Burst */
+.horizon-gradient {
+  background: radial-gradient(55% 100% at 50% 100%, rgba(0, 242, 254, 0.22) 0%, rgba(0, 102, 255, 0.08) 45%, transparent 75%);
+}
+
+/* Interactive Press Inertia */
+.press-cyber {
+  transition: transform 140ms var(--spring-snappy), filter 140ms ease;
+}
+
+.press-cyber:active {
+  transform: scale(0.975);
+}
+
+/* Minimalist Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #27272A;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3F3F46;
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-scanline {
+    animation: none !important;
+  }
+}
