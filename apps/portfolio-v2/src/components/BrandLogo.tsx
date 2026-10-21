@@ -86,22 +86,74 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
         viewBox="0 0 120 120"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        shapeRendering="geometricPrecision"
         className={className}
         aria-label="danimtx Stealth Cat Logo"
       >
         <defs>
           <linearGradient id="stealthGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#D4F014" />
-            <stop offset="100%" stopColor="#A8DE08" />
+            <stop offset="0%" stopColor="#E8FF38" />
+            <stop offset="50%" stopColor="#D4F014" />
+            <stop offset="100%" stopColor="#96D600" />
           </linearGradient>
         </defs>
-        <polygon points="30,22 48,52 26,52" fill="url(#stealthGrad)" />
-        <polygon points="90,22 94,52 72,52" fill="url(#stealthGrad)" />
-        <path d="M48,52 L72,52 L60,62 Z" fill="#1E1E1E" stroke="url(#stealthGrad)" strokeWidth="2" />
-        <polygon points="26,52 60,38 94,52 90,84 60,102 30,84" fill="#141414" stroke="url(#stealthGrad)" strokeWidth="3" strokeLinejoin="round" />
-        <polygon points="40,64 54,66 44,74" fill="#D4F014" />
-        <polygon points="80,64 66,66 76,74" fill="#D4F014" />
-        <circle cx="60" cy="80" r="3" fill="#D4F014" />
+
+        {/* Clean Precision Feline Geometry */}
+        {/* Left Ear */}
+        <polygon points="30,22 48,52 26,52" fill="url(#stealthGrad)" strokeLinejoin="round" />
+        <polygon points="33,28 45,50 28.5,50" fill="#141414" />
+
+        {/* Right Ear */}
+        <polygon points="90,22 94,52 72,52" fill="url(#stealthGrad)" strokeLinejoin="round" />
+        <polygon points="87,28 91.5,50 75,50" fill="#141414" />
+
+        {/* Crown bridge between ears */}
+        <path d="M48,52 L72,52 L60,62 Z" fill="#1C1C1E" stroke="url(#stealthGrad)" strokeWidth="2" strokeLinejoin="round" />
+
+        {/* Forehead Diamond Reactor */}
+        <polygon points="60,45 65,52 60,59 55,52" fill="#18181A" stroke="url(#stealthGrad)" strokeWidth="1.2" strokeLinejoin="round" />
+        <circle cx="60" cy="52" r="1.5" fill="#D4F014" />
+
+        {/* Sleek Cat Mask Outline */}
+        <polygon
+          points="26,52 60,38 94,52 90,84 60,102 30,84"
+          fill="#141414"
+          stroke="url(#stealthGrad)"
+          strokeWidth="3"
+          strokeLinejoin="round"
+        />
+
+        {/* Subtle Inner Cheek/Chin Contour Line */}
+        <polygon
+          points="31,56 60,43 89,56 85.5,81 60,96 34.5,81"
+          fill="none"
+          stroke="#FFFFFF"
+          strokeOpacity="0.06"
+          strokeWidth="1"
+          strokeLinejoin="round"
+        />
+
+        {/* High-Tech Slit Eyes */}
+        <polygon points="38,63 54,66 43,74" fill="url(#stealthGrad)" />
+        <polygon points="41,64.5 51,66.5 44,72" fill="#F7FF9E" />
+        <line x1="46.5" y1="65" x2="45" y2="71" stroke="#101010" strokeWidth="1.8" strokeLinecap="round" />
+        <circle cx="45.5" cy="67" r="0.7" fill="#FFFFFF" />
+
+        <polygon points="82,63 66,66 77,74" fill="url(#stealthGrad)" />
+        <polygon points="79,64.5 69,66.5 76,72" fill="#F7FF9E" />
+        <line x1="73.5" y1="65" x2="75" y2="71" stroke="#101010" strokeWidth="1.8" strokeLinecap="round" />
+        <circle cx="74.5" cy="67" r="0.7" fill="#FFFFFF" />
+
+        {/* Nose prompt */}
+        <circle cx="60" cy="80" r="2.6" fill="#D4F014" />
+
+        {/* Whiskers */}
+        <g stroke="#D4F014" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.85">
+          <line x1="20" y1="72" x2="36" y2="72" />
+          <line x1="22" y1="80" x2="38" y2="78" />
+          <line x1="100" y1="72" x2="84" y2="72" />
+          <line x1="98" y1="80" x2="82" y2="78" />
+        </g>
       </svg>
     );
   }

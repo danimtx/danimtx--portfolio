@@ -133,18 +133,299 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-/* Stealth Cat Ambient 3D Float (for Mobile & Idle Desktop) */
+/* Stealth Cat Ambient 3D Float (composes cleanly with inline 3D rotateX/rotateY) */
 @keyframes heroCatFloat {
   0%, 100% {
-    transform: translateY(0px) rotateX(0deg) rotateY(0deg);
+    translate: 0px 0px;
   }
   50% {
-    transform: translateY(-8px) rotateX(3deg) rotateY(-2.5deg);
+    translate: 0px -8px;
   }
 }
 
 .animate-cat-float {
   animation: heroCatFloat 6.5s ease-in-out infinite;
+}
+
+/* Paw Licking / Grooming Animation - Ultra-Crisp HD Articulated Grooming */
+@keyframes catPawGroom {
+  0% {
+    transform: translateY(14px) rotate(10deg);
+  }
+  16% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  30% {
+    transform: translateY(-2.5px) rotate(-5deg);
+  }
+  46% {
+    transform: translateY(1.5px) rotate(3deg);
+  }
+  62% {
+    transform: translateY(-2.5px) rotate(-5deg);
+  }
+  78% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  92% {
+    transform: translateY(8px) rotate(6deg);
+  }
+  100% {
+    transform: translateY(14px) rotate(10deg);
+  }
+}
+
+.animate-paw-groom {
+  animation: catPawGroom 2.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  will-change: transform;
+  transform-origin: 100px 144px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Tongue Flick / Lapping Animation */
+@keyframes catTongueGroom {
+  0%, 14%, 86%, 100% {
+    transform: scale(0) translate(0, 0);
+    opacity: 0;
+  }
+  25%, 41%, 57%, 73% {
+    transform: scale(1.15) translate(4px, 1.8px);
+    opacity: 1;
+  }
+  33%, 49%, 65% {
+    transform: scale(0.35) translate(1px, 0.5px);
+    opacity: 0.7;
+  }
+}
+
+.animate-tongue-groom {
+  animation: catTongueGroom 2.4s cubic-bezier(0.34, 1.3, 0.64, 1) forwards;
+  will-change: transform, opacity;
+  transform-origin: 90px 92px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Head Dip & Bob Rhythm during Grooming */
+@keyframes catHeadGroom {
+  0%, 100% {
+    transform: rotate(0deg) translate(0, 0);
+  }
+  18% {
+    transform: rotate(5deg) translate(2px, 3px);
+  }
+  32% {
+    transform: rotate(3deg) translate(1.5px, 1.8px);
+  }
+  46% {
+    transform: rotate(5.5deg) translate(2.5px, 3.5px);
+  }
+  62% {
+    transform: rotate(3.5deg) translate(1.8px, 2px);
+  }
+  78% {
+    transform: rotate(5deg) translate(2px, 3px);
+  }
+}
+
+.animate-head-groom {
+  animation: catHeadGroom 2.4s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Paw Grooming Vector Diamond Sparkles */
+@keyframes lickSparkle1 {
+  0%, 25% {
+    transform: scale(0) translate(0, 0);
+    opacity: 0;
+  }
+  45% {
+    transform: scale(1.3) translate(-6px, -8px);
+    opacity: 1;
+  }
+  65% {
+    transform: scale(0.6) translate(-10px, -15px);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes lickSparkle2 {
+  0%, 48% {
+    transform: scale(0) translate(0, 0);
+    opacity: 0;
+  }
+  68% {
+    transform: scale(1.35) translate(5px, -10px);
+    opacity: 1;
+  }
+  88% {
+    transform: scale(0.5) translate(8px, -18px);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+.animate-lick-sparkle-1 {
+  animation: lickSparkle1 2.4s ease-out forwards;
+}
+
+.animate-lick-sparkle-2 {
+  animation: lickSparkle2 2.4s ease-out forwards;
+}
+
+/* Speech Bubble Pop-In */
+@keyframes bubblePopIn {
+  0% {
+    transform: scale(0.7) translateY(8px);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.05) translateY(-2px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-bubble-pop {
+  animation: bubblePopIn 320ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Feline Ear Twitch on Click / Alert */
+@keyframes earTwitchLeft {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-9deg);
+  }
+  50% {
+    transform: rotate(4deg);
+  }
+  75% {
+    transform: rotate(-3deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes earTwitchRight {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(9deg);
+  }
+  50% {
+    transform: rotate(-4deg);
+  }
+  75% {
+    transform: rotate(3deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-ear-twitch-left {
+  animation: earTwitchLeft 420ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.animate-ear-twitch-right {
+  animation: earTwitchRight 420ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* =====================================================================
+   Cute Inquisitive Head Tilt & Affection (Carita feliz ^ ^ y ladeo tierno)
+===================================================================== */
+@keyframes catHeadTilt {
+  0% {
+    transform: rotate(0deg) translate(0, 0);
+  }
+  22% {
+    transform: rotate(7.5deg) translate(2.5px, -1.5px);
+  }
+  75% {
+    transform: rotate(6.8deg) translate(2.2px, -1.2px);
+  }
+  100% {
+    transform: rotate(0deg) translate(0, 0);
+  }
+}
+
+.animate-cat-head-tilt {
+  animation: catHeadTilt 2.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Floating Affection Hearts & Music Notes */
+@keyframes purrFloat1 {
+  0% {
+    transform: translate(0, 0) scale(0.6);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+    transform: translate(-6px, -10px) scale(1.15);
+  }
+  100% {
+    transform: translate(-16px, -36px) scale(0.85);
+    opacity: 0;
+  }
+}
+
+@keyframes purrFloat2 {
+  0% {
+    transform: translate(0, 0) scale(0.6);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+    transform: translate(8px, -12px) scale(1.2);
+  }
+  100% {
+    transform: translate(20px, -42px) scale(0.85);
+    opacity: 0;
+  }
+}
+
+@keyframes purrFloat3 {
+  0% {
+    transform: translate(0, 0) scale(0.6);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+    transform: translate(2px, -16px) scale(1.25);
+  }
+  100% {
+    transform: translate(4px, -48px) scale(0.9);
+    opacity: 0;
+  }
+}
+
+.animate-purr-heart-1 {
+  animation: purrFloat1 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-purr-heart-2 {
+  animation: purrFloat2 2.3s cubic-bezier(0.16, 1, 0.3, 1) 180ms forwards;
+}
+
+.animate-purr-heart-3 {
+  animation: purrFloat3 2.4s cubic-bezier(0.16, 1, 0.3, 1) 360ms forwards;
 }
 
 /* Hide scrollbars for clean horizontal chip scrolling */
@@ -154,6 +435,17 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* =====================================================================
+   Stealth Cat Side Silhouette — Outer Rim Light on Dark Surfaces
+===================================================================== */
+.cat-silhouette-root[data-surface="dark"] .cat-unified-silhouette {
+  filter:
+    drop-shadow(0 -1px 0 rgba(212, 240, 20, 0.7))
+    drop-shadow(1px 0 0 rgba(212, 240, 20, 0.5))
+    drop-shadow(-1px 0 0 rgba(212, 240, 20, 0.5))
+    drop-shadow(0 1px 0 rgba(212, 240, 20, 0.35));
 }
 
 /* Accessibility: Strict Prefers Reduced Motion */
@@ -167,8 +459,19 @@
     scroll-behavior: auto !important;
   }
   .animate-cat-eyes,
-  .animate-cat-float {
+  .animate-cat-float,
+  .animate-paw-groom,
+  .animate-tongue-groom,
+  .animate-head-groom,
+  .animate-lick-sparkle-1,
+  .animate-lick-sparkle-2,
+  .animate-bubble-pop,
+  .animate-ear-twitch-left,
+  .animate-ear-twitch-right,
+  .animate-cat-head-tilt,
+  .animate-purr-heart-1,
+  .animate-purr-heart-2,
+  .animate-purr-heart-3 {
     animation: none !important;
   }
 }
-

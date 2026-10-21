@@ -321,6 +321,10 @@ export const ExperienceSection: React.FC = () => {
                 ref={(el) => {
                   cardsRef.current[index] = el;
                 }}
+                data-cat-ledge="true"
+                data-cat-ledge-id={`exp-card-${item.id}`}
+                data-cat-surface="light"
+                data-cat-behavior="sniff"
                 onMouseMove={handleSpotlight}
                 onTouchMove={handleSpotlightTouch}
                 className={`apple-spotlight apple-spotlight-inner relative p-5 sm:p-8 lg:p-10 rounded-3xl border transition-all duration-300 group ${
@@ -372,7 +376,9 @@ export const ExperienceSection: React.FC = () => {
                 <div className="mt-6 pt-6 border-t border-neutral-200/60 space-y-3">
                   {item.bullets.map((bullet, i) => (
                     <div key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-neutral-700 leading-relaxed">
-                      <CheckCircle2 className="w-4 h-4 text-[#A6E600] shrink-0 mt-0.5" />
+                      <span className="w-5 h-5 rounded-full bg-[#101010] text-[#D4F014] flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-[#D4F014]" />
+                      </span>
                       <span>{bullet}</span>
                     </div>
                   ))}

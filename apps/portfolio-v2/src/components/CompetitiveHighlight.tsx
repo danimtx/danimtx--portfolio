@@ -46,6 +46,10 @@ export const CompetitiveHighlight: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           {/* Main Editorial Achievement Card */}
           <div
+            data-cat-ledge="true"
+            data-cat-ledge-id="icpc-main-card"
+            data-cat-surface="light"
+            data-cat-behavior="alert"
             onMouseMove={handleSpotlight}
             onTouchMove={handleSpotlightTouch}
             className="apple-spotlight apple-spotlight-inner lg:col-span-7 rounded-[32px] bg-[#101010] text-white p-8 sm:p-12 flex flex-col justify-between space-y-8 shadow-xl"

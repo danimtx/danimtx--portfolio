@@ -1,0 +1,202 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 240 240"
+  width="100%"
+  height="100%"
+  shape-rendering="geometricPrecision"
+  role="img"
+  aria-label="danimtx 3D Stealth Cat Logo"
+>
+  <defs>
+    <!-- Primary Cyber Lime Gradient (Bright & Crisp) -->
+    <linearGradient id="stealthLime" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F4FF61" />
+      <stop offset="45%" stop-color="#D4F014" />
+      <stop offset="100%" stop-color="#88C400" />
+    </linearGradient>
+
+    <!-- Shaded Lime for 3D Ear & Nose Depth -->
+    <linearGradient id="stealthLimeDepth" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C8E60C" />
+      <stop offset="100%" stop-color="#649400" />
+    </linearGradient>
+
+    <!-- Brighter Titanium & Gunmetal 3D Facet Gradients -->
+    <linearGradient id="titaniumLitHigh" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#636B7C" />
+      <stop offset="100%" stop-color="#3E4451" />
+    </linearGradient>
+
+    <linearGradient id="titaniumLitMid" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4D5463" />
+      <stop offset="100%" stop-color="#2F343F" />
+    </linearGradient>
+
+    <linearGradient id="titaniumShadowMid" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#393E4A" />
+      <stop offset="100%" stop-color="#22262F" />
+    </linearGradient>
+
+    <linearGradient id="titaniumShadowDeep" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2B2F39" />
+      <stop offset="100%" stop-color="#171A21" />
+    </linearGradient>
+
+    <!-- Pure Vector Radial Aura (No Raster Filter Blur) -->
+    <radialGradient id="vectorAura" cx="50%" cy="54%" r="46%">
+      <stop offset="0%" stop-color="#D4F014" stop-opacity="0.22" />
+      <stop offset="60%" stop-color="#D4F014" stop-opacity="0.06" />
+      <stop offset="100%" stop-color="#D4F014" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="eyeAuraLeft" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#D4F014" stop-opacity="0.38" />
+      <stop offset="100%" stop-color="#D4F014" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Squircle Dark Obsidian Base -->
+  <rect width="240" height="240" rx="64" fill="#101216" />
+  <rect
+    x="3"
+    y="3"
+    width="234"
+    height="234"
+    rx="61"
+    fill="none"
+    stroke="#D4F014"
+    stroke-opacity="0.22"
+    stroke-width="2"
+  />
+
+  <!-- Crisp Vector Ambient Glow -->
+  <circle cx="120" cy="126" r="104" fill="url(#vectorAura)" />
+
+  <!-- Soft Vector Cast Shadow Silhouette -->
+  <polygon
+    points="44,110 52,36 96,94 120,78 144,94 188,36 196,110 204,142 184,182 144,202 120,214 96,202 56,182 36,142"
+    fill="#050608"
+    fill-opacity="0.65"
+  />
+
+  <!-- ================= EARS (3D Beveled Pyramids) ================= -->
+  <g stroke-linejoin="round" stroke-linecap="round">
+    <!-- Left Ear -->
+    <polygon points="52,30 68,96 44,104" fill="url(#stealthLime)" stroke="url(#stealthLime)" stroke-width="1" />
+    <polygon points="52,30 96,88 68,96" fill="url(#stealthLimeDepth)" stroke="url(#stealthLimeDepth)" stroke-width="1" />
+    <polygon points="58,48 88,88 52,98" fill="#1A1D24" stroke="#D4F014" stroke-width="1.5" stroke-opacity="0.55" />
+
+    <!-- Right Ear -->
+    <polygon points="188,30 144,88 172,96" fill="url(#stealthLime)" stroke="url(#stealthLime)" stroke-width="1" />
+    <polygon points="188,30 172,96 196,104" fill="url(#stealthLimeDepth)" stroke="url(#stealthLimeDepth)" stroke-width="1" />
+    <polygon points="182,48 152,88 188,98" fill="#15181F" stroke="#D4F014" stroke-width="1.5" stroke-opacity="0.45" />
+  </g>
+
+  <!-- ================= UNIFIED BASE PLATE (Eliminates Polygon Seam Gaps) ================= -->
+  <polygon
+    points="44,104 96,88 120,72 144,88 196,104 204,136 184,176 144,196 120,208 96,196 56,176 36,136"
+    fill="#252932"
+    stroke-linejoin="round"
+  />
+
+  <!-- ================= CRANIAL & FACIAL 3D TITANIUM FACETS ================= -->
+  <g stroke-linejoin="round" stroke-linecap="round">
+    <!-- Crown Upper Facets -->
+    <polygon points="96,88 120,72 120,104" fill="url(#titaniumLitHigh)" stroke="#5A6272" stroke-width="0.8" />
+    <polygon points="144,88 120,72 120,104" fill="url(#titaniumShadowMid)" stroke="#353A46" stroke-width="0.8" />
+
+    <!-- Brow Ridge Plates -->
+    <polygon points="96,88 120,104 92,112 44,104" fill="url(#titaniumLitMid)" stroke="#4A5160" stroke-width="0.8" />
+    <polygon points="144,88 120,104 148,112 196,104" fill="url(#titaniumShadowDeep)" stroke="#2A2E38" stroke-width="0.8" />
+
+    <!-- Recessed Orbital Eye Sockets -->
+    <polygon points="44,104 92,112 96,160 72,152 36,136" fill="#181B22" stroke="#2B303C" stroke-width="0.8" />
+    <polygon points="196,104 148,112 144,160 168,152 204,136" fill="#14171D" stroke="#242832" stroke-width="0.8" />
+
+    <!-- Outer Cheekbone Armor Plates -->
+    <polygon points="36,136 72,152 56,176" fill="url(#titaniumLitHigh)" stroke="#565E6E" stroke-width="0.8" />
+    <polygon points="204,136 168,152 184,176" fill="url(#titaniumShadowMid)" stroke="#323742" stroke-width="0.8" />
+
+    <!-- Lower Muzzle & Jaw Plates -->
+    <polygon points="72,152 96,160 96,196 56,176" fill="url(#titaniumLitMid)" stroke="#434957" stroke-width="0.8" />
+    <polygon points="168,152 144,160 144,196 184,176" fill="url(#titaniumShadowDeep)" stroke="#262A34" stroke-width="0.8" />
+
+    <!-- Chin Shield Facets -->
+    <polygon points="96,160 120,156 120,208 96,196" fill="url(#titaniumLitHigh)" stroke="#525A6A" stroke-width="0.8" />
+    <polygon points="144,160 120,156 120,208 144,196" fill="url(#titaniumShadowMid)" stroke="#353A46" stroke-width="0.8" />
+
+    <!-- Projecting 3D Nasal Bridge -->
+    <polygon points="120,104 92,112 96,160 120,156" fill="url(#titaniumLitHigh)" stroke="#636B7C" stroke-width="0.8" />
+    <polygon points="120,104 148,112 144,160 120,156" fill="url(#titaniumLitMid)" stroke="#454C59" stroke-width="0.8" />
+  </g>
+
+  <!-- ================= CRISP 3D BEVEL CREASES & SPECULAR HIGHLIGHTS ================= -->
+  <g fill="none" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Specular Titanium Ridge Lines -->
+    <polyline points="44,104 92,112 120,104 148,112 196,104" stroke="#E2E8F0" stroke-opacity="0.38" stroke-width="1.8" />
+    <polyline points="36,136 72,152 96,160 120,156 144,160 168,152 204,136" stroke="#E2E8F0" stroke-opacity="0.32" stroke-width="1.6" />
+    <line x1="120" y1="72" x2="120" y2="208" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="2" />
+    <line x1="72" y1="152" x2="56" y2="176" stroke="#E2E8F0" stroke-opacity="0.3" stroke-width="1.5" />
+    <line x1="168" y1="152" x2="184" y2="176" stroke="#E2E8F0" stroke-opacity="0.22" stroke-width="1.5" />
+    <line x1="96" y1="160" x2="96" y2="196" stroke="#E2E8F0" stroke-opacity="0.25" stroke-width="1.5" />
+    <line x1="144" y1="160" x2="144" y2="196" stroke="#E2E8F0" stroke-opacity="0.2" stroke-width="1.5" />
+
+    <!-- Cyber Lime Energy Creases on Nasal Bridge -->
+    <line x1="92" y1="112" x2="96" y2="160" stroke="#D4F014" stroke-opacity="0.65" stroke-width="2" />
+    <line x1="148" y1="112" x2="144" y2="160" stroke="#D4F014" stroke-opacity="0.45" stroke-width="2" />
+  </g>
+
+  <!-- Forehead Stealth Diamond Emblem -->
+  <polygon
+    points="120,80 133,100 120,120 107,100"
+    fill="#1E222B"
+    stroke="url(#stealthLime)"
+    stroke-width="2.6"
+    stroke-linejoin="round"
+  />
+  <polygon points="120,86 127,100 120,114 113,100" fill="#D4F014" fill-opacity="0.45" />
+  <circle cx="120" cy="100" r="3" fill="#F8FF9E" />
+
+  <!-- Outer Stealth Armor Perimeter Rim -->
+  <polygon
+    points="44,104 96,88 120,72 144,88 196,104 204,136 184,176 144,196 120,208 96,196 56,176 36,136"
+    fill="none"
+    stroke="url(#stealthLime)"
+    stroke-width="4.5"
+    stroke-linejoin="round"
+  />
+
+  <!-- ================= 3D SCULPTED NOSE PRISM ================= -->
+  <g stroke-linejoin="round">
+    <polygon points="105,156 120,149 120,171" fill="#F4FF61" />
+    <polygon points="135,156 120,149 120,171" fill="#9BE000" />
+    <polygon points="105,156 120,149 135,156 120,171" fill="none" stroke="#14171D" stroke-width="1.4" />
+  </g>
+
+  <!-- ================= CRISP VECTOR LASER EYES ================= -->
+  <!-- Subtle Vector Eye Glow Circles (Zero Raster Blur) -->
+  <circle cx="68" cy="132" r="26" fill="url(#eyeAuraLeft)" />
+  <circle cx="172" cy="132" r="26" fill="url(#eyeAuraLeft)" />
+
+  <g stroke-linejoin="round">
+    <!-- Left Angular Eye -->
+    <polygon points="52,118 90,127 82,145 48,132" fill="url(#stealthLime)" stroke="#F4FF61" stroke-width="1.2" />
+    <polygon points="58,122 84,128.5 78,140 54,131" fill="#FAFFB8" />
+    <polygon points="69,122 75,123.5 72,141 66.5,139.5" fill="#101216" />
+    <circle cx="67.5" cy="127" r="2" fill="#FFFFFF" />
+
+    <!-- Right Angular Eye -->
+    <polygon points="188,118 150,127 158,145 192,132" fill="url(#stealthLime)" stroke="#F4FF61" stroke-width="1.2" />
+    <polygon points="182,122 156,128.5 162,140 186,131" fill="#FAFFB8" />
+    <polygon points="171,122 165,123.5 168,141 173.5,139.5" fill="#101216" />
+    <circle cx="169.5" cy="127" r="2" fill="#FFFFFF" />
+  </g>
+
+  <!-- ================= FLOATING CODE-SLASH WHISKERS ================= -->
+  <g stroke="#D4F014" stroke-linecap="round">
+    <line x1="22" y1="137" x2="58" y2="141" stroke-width="4.8" />
+    <line x1="28" y1="153" x2="62" y2="151" stroke-width="4" stroke-opacity="0.88" />
+    <line x1="218" y1="137" x2="182" y2="141" stroke-width="4.8" />
+    <line x1="212" y1="153" x2="178" y2="151" stroke-width="4" stroke-opacity="0.88" />
+  </g>
+</svg>

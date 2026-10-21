@@ -21,7 +21,13 @@ export const Footer: React.FC = () => {
   return (
     <footer id="contacto" className="w-full px-4 sm:px-6 lg:px-10 py-12 md:py-20">
       <div className="max-w-7xl mx-auto">
-        <div className="rounded-[32px] md:rounded-[40px] bg-[#101010] text-white p-8 sm:p-12 lg:p-16 border border-white/5 shadow-2xl space-y-12">
+        <div
+          data-cat-ledge="true"
+          data-cat-ledge-id="footer-card"
+          data-cat-surface="light"
+          data-cat-behavior="sleep"
+          className="rounded-[32px] md:rounded-[40px] bg-[#101010] text-white p-8 sm:p-12 lg:p-16 border border-white/5 shadow-2xl space-y-12"
+        >
           
           {/* Main Footer Banner */}
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 pb-10 border-b border-white/10">

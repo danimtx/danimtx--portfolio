@@ -50,7 +50,7 @@ export const translations = {
       greeting: "Hey 👋 I'm danimtx",
       title1: 'Software Engineer &',
       title2: 'System Architect',
-      description: 'Fullstack & Backend Software Engineer specializing in scalable architectures with .NET 10, C#, and Python. Proven expertise in microservices with Clean Architecture, CQRS, Microsoft Azure Cloud deployments with CI/CD, offline-first mobile apps with React Native, and high-performance problem solving as a 2x ACM-ICPC Regional Finalist.',
+      description: 'Fullstack & Backend Engineer architecting decoupled .NET 10 microservices, resilient offline-first React Native mobile systems, and scalable cloud solutions backed by competitive algorithmic rigor.',
       ctaWork: "Let's Work Together",
       ctaProjects: 'Explore Projects',
       stackLabel: 'Core Stack:',
@@ -69,10 +69,27 @@ export const translations = {
       availability: 'Available for projects & full-time roles',
       p1: 'I am ',
       boldName: 'Daniel Mancilla (danimtx)',
-      p2: ', a Fullstack & Backend Software Engineer focused on ',
-      boldArch: 'Clean Architecture, .NET 10 microservices, and Microsoft Azure Cloud systems',
-      p3: '. I design and implement decoupled enterprise architectures with CQRS and secure REST APIs, automate CI/CD with Docker, develop offline-first mobile applications, and apply elite algorithmic problem-solving backed by being a 2x ACM-ICPC Regional Finalist.',
-      linkText: 'Explore my professional trajectory'
+      p2: '. I build software where ',
+      boldArch: 'mathematical rigor meets production engineering',
+      p3: '—crafting decoupled enterprise microservices, resilient offline architectures, and fault-tolerant cloud systems designed to perform flawlessly under real-world scale.',
+      linkText: 'Explore my professional trajectory',
+      pillars: [
+        {
+          num: '01',
+          title: 'Enterprise Backend',
+          desc: '.NET 10, Clean Architecture, CQRS & Azure Cloud'
+        },
+        {
+          num: '02',
+          title: 'Offline-First Mobile',
+          desc: 'React Native, Expo SDK 54, MapLibre & PostGIS'
+        },
+        {
+          num: '03',
+          title: 'Algorithmic Rigor',
+          desc: '2x ACM-ICPC Regional Finalist & IEEEXtreme Top 6'
+        }
+      ]
     },
     experience: {
       tag: 'Career & Trajectory',
@@ -281,7 +298,10 @@ export const translations = {
             { label: 'Domain', value: 'Networks & CCTV' }
           ],
           featuredImage: '/projects/ciber/listarInspeccion.WebP',
-          galleryImages: ['/projects/ciber/listarInspeccion.WebP']
+          galleryImages: ['/projects/ciber/listarInspeccion.WebP'],
+          links: {
+            demo: 'https://cybercorp-adm-test.vercel.app'
+          }
         },
         {
           id: 'construction-microservices-erp',
@@ -354,7 +374,10 @@ export const translations = {
             { label: 'Platform', value: 'Android APK' }
           ],
           featuredImage: '/projects/Dino/DinoCochaGame.WebP',
-          galleryImages: ['/projects/Dino/DinoCochaGame.WebP']
+          galleryImages: ['/projects/Dino/DinoCochaGame.WebP'],
+          links: {
+            apk: '/projects/Dino/Version_0.3_Prueba_Pts.apk'
+          }
         },
         {
           id: 'juez-singa-competitive',
@@ -390,7 +413,10 @@ export const translations = {
             { label: 'Languages', value: 'C++, Python, Java' }
           ],
           featuredImage: '/projects/JuezSinga/swguerJuezSinga.png',
-          galleryImages: ['/projects/JuezSinga/swguerJuezSinga.png']
+          galleryImages: ['/projects/JuezSinga/swguerJuezSinga.png'],
+          links: {
+            github: 'https://github.com/danimtx/JuezSinga.git'
+          }
         }
       ]
     },
@@ -477,7 +503,7 @@ export const translations = {
       greeting: 'Hey 👋 Soy danimtx',
       title1: 'Software Engineer &',
       title2: 'System Architect',
-      description: 'Ingeniero de Software Fullstack & Backend especializado en arquitecturas desacopladas con .NET 10 / C# y Python, microservicios bajo Clean Architecture y CQRS, despliegues en la nube con Microsoft Azure & CI/CD, y aplicaciones móviles offline-first con React Native. Respaldado por ser 2x Finalista Regional del ACM-ICPC.',
+      description: 'Ingeniero de Software Fullstack & Backend especializado en microservicios desacoplados con .NET 10, sistemas móviles offline-first con React Native y soluciones escalables en la nube respaldadas por rigor algorítmico.',
       ctaWork: 'Trabajemos Juntos',
       ctaProjects: 'Explorar Proyectos',
       stackLabel: 'Stack Principal:',
@@ -496,10 +522,27 @@ export const translations = {
       availability: 'Disponible para proyectos & contratación',
       p1: 'Soy ',
       boldName: 'Daniel Mancilla (danimtx)',
-      p2: ', Ingeniero de Software Fullstack & Backend enfocado en ',
-      boldArch: 'Clean Architecture, microservicios en .NET 10 y sistemas en la nube con Azure',
-      p3: '. Diseño e implemento soluciones empresariales desacopladas con CQRS y APIs seguras, automatizo flujos CI/CD con Docker, desarrollo aplicaciones móviles con enfoque offline-first y aplico rigor algorítmico forjado como 2x Finalista Regional del ACM-ICPC.',
-      linkText: 'Conoce mi trayectoria profesional'
+      p2: '. Concibo el desarrollo donde el ',
+      boldArch: 'rigor matemático y la ingeniería de producción convergen',
+      p3: '—diseñando microservicios desacoplados, arquitecturas móviles offline-first y sistemas cloud resilientes construidos para tolerar fallos y escalar con total predictibilidad.',
+      linkText: 'Conoce mi trayectoria profesional',
+      pillars: [
+        {
+          num: '01',
+          title: 'Enterprise Backend',
+          desc: '.NET 10, Clean Architecture, CQRS & Azure Cloud'
+        },
+        {
+          num: '02',
+          title: 'Mobile Offline-First',
+          desc: 'React Native, Expo SDK 54, MapLibre & PostGIS'
+        },
+        {
+          num: '03',
+          title: 'Rigor Algorítmico',
+          desc: '2x Finalista Regional ACM-ICPC & Top 6 IEEEXtreme'
+        }
+      ]
     },
     experience: {
       tag: 'Trayectoria Profesional',
@@ -708,7 +751,10 @@ export const translations = {
             { label: 'Área', value: 'Redes & CCTV' }
           ],
           featuredImage: '/projects/ciber/listarInspeccion.WebP',
-          galleryImages: ['/projects/ciber/listarInspeccion.WebP']
+          galleryImages: ['/projects/ciber/listarInspeccion.WebP'],
+          links: {
+            demo: 'https://cybercorp-adm-test.vercel.app'
+          }
         },
         {
           id: 'construction-microservices-erp',
@@ -781,7 +827,10 @@ export const translations = {
             { label: 'Plataforma', value: 'Android APK' }
           ],
           featuredImage: '/projects/Dino/DinoCochaGame.WebP',
-          galleryImages: ['/projects/Dino/DinoCochaGame.WebP']
+          galleryImages: ['/projects/Dino/DinoCochaGame.WebP'],
+          links: {
+            apk: '/projects/Dino/Version_0.3_Prueba_Pts.apk'
+          }
         },
         {
           id: 'juez-singa-competitive',
@@ -817,7 +866,10 @@ export const translations = {
             { label: 'Lenguajes', value: 'C++, Python, Java' }
           ],
           featuredImage: '/projects/JuezSinga/swguerJuezSinga.png',
-          galleryImages: ['/projects/JuezSinga/swguerJuezSinga.png']
+          galleryImages: ['/projects/JuezSinga/swguerJuezSinga.png'],
+          links: {
+            github: 'https://github.com/danimtx/JuezSinga.git'
+          }
         }
       ]
     },

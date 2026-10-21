@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, CheckCircle, ArrowUpRight } from 'lucide-react';
+import { Sparkles, ArrowUpRight, Layers } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { translations, TranslatedProject } from '../i18n/translations';
 import { ProjectDetailModal } from './ProjectDetailModal';
@@ -70,6 +70,10 @@ export const ProjectsShowcase: React.FC = () => {
           {filteredProjects.map((project) => (
             <article
               key={project.id}
+              data-cat-ledge="true"
+              data-cat-ledge-id={`project-card-${project.id}`}
+              data-cat-surface="light"
+              data-cat-behavior="stalk"
               onMouseMove={handleSpotlight}
               onTouchMove={handleSpotlightTouch}
               className="apple-spotlight apple-spotlight-inner bg-white rounded-[32px] p-6 sm:p-10 lg:p-12 border border-neutral-200/90 shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:border-neutral-300"
@@ -104,36 +108,33 @@ export const ProjectsShowcase: React.FC = () => {
                     </p>
                   </div>
 
-                  {/* Narrative: Description, Challenge, Solution */}
-                  <div className="space-y-3 text-sm text-[#444444] leading-relaxed">
+                  {/* Narrative: Executive Description */}
+                  <div className="text-sm text-[#444444] leading-relaxed">
                     <p>{project.description}</p>
-                    <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200/60 space-y-2">
-                      <p className="text-xs text-neutral-700">
-                        <strong className="text-black font-semibold">{t.labels.challenge}</strong> {project.challenge}
-                      </p>
-                      <p className="text-xs text-neutral-700">
-                        <strong className="text-black font-semibold">{t.labels.solution}</strong> {project.solution}
-                      </p>
-                    </div>
                   </div>
 
-                  {/* Highlights */}
-                  <div className="space-y-2">
-                    <span className="text-xs font-bold text-neutral-900 uppercase tracking-wider">
-                      {t.labels.highlights}
+                  {/* Subtle Architecture Specs Teaser */}
+                  <div
+                    onClick={() => setActiveModalProject(project)}
+                    className="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-neutral-50 hover:bg-neutral-100/90 border border-neutral-200/80 cursor-pointer transition-all group/teaser"
+                  >
+                    <div className="flex items-center gap-2 text-xs text-neutral-600">
+                      <Layers className="w-3.5 h-3.5 text-[#101010]" />
+                      <span className="font-semibold text-neutral-800">
+                        {lang === 'es' ? 'Ficha de Ingeniería:' : 'Architecture Breakdown:'}
+                      </span>
+                      <span className="hidden sm:inline text-neutral-500">
+                        {lang === 'es' ? 'Desafío Técnico, Solución & Highlights' : 'Technical Challenge, Solution & Highlights'}
+                      </span>
+                    </div>
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-neutral-900 group-hover/teaser:text-black">
+                      <span>{lang === 'es' ? 'Ver Ficha' : 'Explore'}</span>
+                      <ArrowUpRight className="w-3.5 h-3.5 text-[#101010] transition-transform group-hover/teaser:translate-x-0.5 group-hover/teaser:-translate-y-0.5" />
                     </span>
-                    <ul className="space-y-1.5">
-                      {project.highlights.map((h, i) => (
-                        <li key={i} className="flex items-start gap-2 text-xs text-neutral-700">
-                          <CheckCircle className="w-4 h-4 text-black shrink-0 mt-0.5" />
-                          <span>{h}</span>
-                        </li>
-                      ))}
-                    </ul>
                   </div>
 
                   {/* Tech Stack Chips */}
-                  <div className="pt-2">
+                  <div className="pt-1">
                     <div className="flex flex-wrap gap-1.5">
                       {project.techStack.map((tech, i) => (
                         <span

@@ -30,6 +30,10 @@ export const ProcessSection: React.FC = () => {
             return (
               <div
                 key={idx}
+                data-cat-ledge="true"
+                data-cat-ledge-id={`process-step-${idx}`}
+                data-cat-surface="light"
+                data-cat-behavior="stepping"
                 className="p-6 rounded-3xl bg-[#F8F8F6] border border-neutral-200/80 hover:border-neutral-300 hover:bg-neutral-100/80 transition-all duration-200 flex flex-col justify-between space-y-4 group"
               >
                 <div className="flex items-center justify-between">
