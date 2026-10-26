@@ -127,7 +127,7 @@ export const CatLab: React.FC<CatLabProps> = ({ onReturnToPortfolio }) => {
     const sim = simRef.current;
     if (!sim) return;
     isBusyRef.current = false;
-    const targetX = sim.x > 460 ? 180 : 720;
+    const targetX = sim.x > 450 ? 110 : 790;
     sim.y = 250;
     sim.walkTo(targetX, {
       speed,

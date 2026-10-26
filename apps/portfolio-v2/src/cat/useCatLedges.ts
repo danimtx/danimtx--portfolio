@@ -115,20 +115,31 @@ export const useCatLedges = (enabled: boolean): React.MutableRefObject<LedgeRegi
     regRef.current.remeasure = measureAll;
     if (!enabled || typeof window === 'undefined') return;
 
-    measureAll();
-    document.fonts?.ready?.then(() => measureAll());
+    let rafId = 0;
+    const scheduleMeasure = () => {
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = 0;
+        measureAll();
+      });
+    };
 
-    const ro = new ResizeObserver(() => measureAll());
+    measureAll();
+    document.fonts?.ready?.then(() => scheduleMeasure());
+
+    const ro = new ResizeObserver(() => scheduleMeasure());
     ro.observe(document.documentElement);
 
-    const mo = new MutationObserver(() => measureAll());
-    mo.observe(document.body, { childList: true, subtree: true });
+    const mainEl = document.querySelector('main') || document.body;
+    const mo = new MutationObserver(() => scheduleMeasure());
+    mo.observe(mainEl, { childList: true, subtree: true });
 
-    window.addEventListener('resize', measureAll, { passive: true });
+    window.addEventListener('resize', scheduleMeasure, { passive: true });
     return () => {
+      if (rafId) cancelAnimationFrame(rafId);
       ro.disconnect();
       mo.disconnect();
-      window.removeEventListener('resize', measureAll);
+      window.removeEventListener('resize', scheduleMeasure);
     };
   }, [enabled, measureAll]);
 

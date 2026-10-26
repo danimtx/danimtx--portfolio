@@ -8,9 +8,9 @@ import type { Vec } from './catKinematics';
 export const DIM = {
   hipX: -47,
   shX: 47,
-  femur: 25,
-  tibia: 27,
-  meta: 19,
+  femur: 28,
+  tibia: 28,
+  meta: 18,
   hindToe: 8.5,
   humerus: 24,
   radius: 26,
@@ -51,8 +51,8 @@ export interface BodyPose {
   earF: number;
   eyeOpen: number;
   jaw: number;
-  tailBase: number; // absolute: 0 = straight back, +π/2 = straight up, −π/2 = straight down
-  tailCurl: number; // even curl per segment
+  tailBase: number; // screen-space: 0 = straight back, −π/2 = straight up, +π/2 = straight down
+  tailCurl: number; // even curl per segment (+ = curls forward over the back when the tail is up, − = curls forward along the ground when it hangs down)
   tailTip: number; // extra curl on the last 40 %
   tailAmp: number;
   tailFreq: number;
@@ -89,9 +89,9 @@ const baseBody = (): BodyPose => ({
   earF: 0,
   eyeOpen: 1,
   jaw: 0,
-  tailBase: -0.95,
-  tailCurl: 0.02,
-  tailTip: 0.32,
+  tailBase: -0.92,
+  tailCurl: 0.055,
+  tailTip: 0.65,
   tailAmp: 0.05,
   tailFreq: 0.35,
   tailFront: 0,
@@ -122,20 +122,22 @@ export const posePreset = (p: Posture): Pose => {
         neckAng: -1.32,
         neckLen: 23,
         headPitch: 0.06,
-        tailBase: -1.5,
-        tailCurl: -0.17,
-        tailTip: -0.12,
-        tailAmp: 0.03,
-        tailFreq: 0.25,
-        tailFront: 1,
+        // Tail curves out behind the haunch and lifts gracefully at the tip
+        tailBase: -0.26,
+        tailCurl: 0.055,
+        tailTip: 0.42,
+        tailAmp: 0.025,
+        tailFreq: 0.22,
+        tailFront: 0,
       };
       return {
         body,
         feet: [
-          foot(body.hip.x + 19, 1.5),
-          foot(body.sh.x + 2, 0.08),
-          foot(body.hip.x + 15, 1.5),
-          foot(body.sh.x + 8, 0.08),
+          foot(body.hip.x + 17, 1.5),
+          // Front legs together, straight and vertical (one behind the other)
+          foot(body.sh.x + 4, 0.04),
+          foot(body.hip.x + 13, 1.5),
+          foot(body.sh.x + 5.5, 0.04),
         ],
       };
     }
@@ -180,12 +182,13 @@ export const posePreset = (p: Posture): Pose => {
         earN: sleeping ? -0.25 : 0,
         earF: sleeping ? -0.25 : 0,
         eyeOpen: sleeping ? 0 : 0.85,
-        tailBase: -0.22,
-        tailCurl: -0.06,
-        tailTip: 0.18,
+        // Tail rests behind and curls gently upward at the tip
+        tailBase: -0.14,
+        tailCurl: 0.035,
+        tailTip: 0.28,
         tailAmp: sleeping ? 0.008 : 0.02,
         tailFreq: 0.2,
-        tailFront: 1,
+        tailFront: 0,
         breath: sleeping ? 0.04 : 0.022,
         breathRate: sleeping ? 0.3 : 0.4,
       };

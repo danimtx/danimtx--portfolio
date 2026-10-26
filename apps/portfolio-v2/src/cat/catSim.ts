@@ -201,7 +201,10 @@ export class CatSim {
   private pupil = 0;
 
   private blinkT = -1;
+  private blinkDur = 0.16;
   private nextBlink = 2;
+  private lookIdleT = 0;
+  private nextSlowBlink = 2.5;
   private earTwitch: { ear: 0 | 1; t: number } | null = null;
   private nextEar = 4;
   private rng: () => number;
@@ -331,7 +334,22 @@ export class CatSim {
   }
 
   lookAt(p: Vec | null) {
+    if (p && this.look) {
+      if (Math.hypot(p.x - this.look.x, p.y - this.look.y) > 6) {
+        this.lookIdleT = 0;
+      }
+    } else {
+      this.lookIdleT = 0;
+    }
     this.look = p;
+  }
+
+  /** Trigger a slow affectionate feline blink (~0.55s). */
+  slowBlink() {
+    if (this.blinkT < 0) {
+      this.blinkT = 0;
+      this.blinkDur = 0.56;
+    }
   }
 
   get isMoving() {
@@ -500,9 +518,10 @@ export class CatSim {
     if (this.gaitW > 0.001) {
       const w = this.gaitW;
       const stealthy = this.stealth;
-      tb.tailBase = lerp(tb.tailBase, stealthy ? -0.12 : lerp(1.2, 0.25, this.dashW), w);
-      tb.tailCurl = lerp(tb.tailCurl, stealthy ? 0 : 0.015, w);
-      tb.tailTip = lerp(tb.tailTip, stealthy ? 0.12 : lerp(0.42, 0.05, this.dashW), w);
+      // Content walk: tail high in a soft "?" ; stealth: low & level ; dash: streams back as a rudder
+      tb.tailBase = lerp(tb.tailBase, stealthy ? -0.12 : lerp(-0.92, -0.15, this.dashW), w);
+      tb.tailCurl = lerp(tb.tailCurl, stealthy ? 0 : lerp(0.055, 0.01, this.dashW), w);
+      tb.tailTip = lerp(tb.tailTip, stealthy ? 0.12 : lerp(0.62, 0.05, this.dashW), w);
       tb.tailAmp = lerp(tb.tailAmp, 0.05, w);
       tb.tailFreq = lerp(tb.tailFreq, 0.6, w);
       tb.neckAng = lerp(tb.neckAng, stealthy ? -0.12 : lerp(-0.62, -0.32, this.dashW), w);
@@ -753,11 +772,11 @@ export class CatSim {
     out.hip.x += additiveHipX;
     if (this.dashW > 0.01) {
       const fl = Math.sin(ph) * this.dashW;
-      out.hip.x += 9 * fl;
-      out.sh.x -= 9 * fl;
-      out.arch += 9 * Math.cos(ph) * this.dashW;
-      out.hip.y -= 3 * this.dashW;
-      out.sh.y -= 3 * this.dashW;
+      out.hip.x += 5.5 * fl;
+      out.sh.x -= 5.5 * fl;
+      out.arch += 7 * Math.cos(ph) * this.dashW;
+      out.hip.y -= 2 * this.dashW;
+      out.sh.y -= 2 * this.dashW;
     }
     if (j && j.phase === 'land') {
       const c = bump(clamp(j.t / 0.28, 0, 1)) * (1 - j.t / 0.5);
@@ -768,15 +787,36 @@ export class CatSim {
     out.headPitch += additivePitch;
     out.tailTip += tailTipAdd;
 
-    // Blink & ear twitch
-    if (this.time > this.nextBlink && this.blinkT < 0) this.blinkT = 0;
+    // Blink & ear twitch (includes slow affectionate blink when cursor rests near the cat)
+    if (this.look && this.isIdle) {
+      const f = this.frame;
+      const hx = this.x + this.flip * (f ? f.head.x : 40) * sc;
+      const hy = this.y + (f ? f.head.y : -70) * sc;
+      const dCursor = Math.hypot(this.look.x - hx, this.look.y - hy);
+      if (dCursor < 260) {
+        this.lookIdleT += dt;
+        if (this.lookIdleT > 1.5 && this.time > this.nextSlowBlink && this.blinkT < 0) {
+          this.slowBlink();
+          this.nextSlowBlink = this.time + 5.5 + this.rng() * 3.5;
+        }
+      } else {
+        this.lookIdleT = 0;
+      }
+    } else {
+      this.lookIdleT = 0;
+    }
+
+    if (this.time > this.nextBlink && this.blinkT < 0) {
+      this.blinkT = 0;
+      this.blinkDur = 0.16;
+    }
     let blink = 1;
     if (this.blinkT >= 0) {
       this.blinkT += dt;
-      blink = 1 - bump(this.blinkT / 0.16);
-      if (this.blinkT > 0.16) {
+      blink = 1 - bump(this.blinkT / this.blinkDur);
+      if (this.blinkT > this.blinkDur) {
         this.blinkT = -1;
-        this.nextBlink = this.time + (this.rng() < 0.15 ? 0.25 : 2.5 + this.rng() * 4.5);
+        this.nextBlink = this.time + (this.rng() < 0.15 ? 0.28 : 2.6 + this.rng() * 4.5);
       }
     }
     out.eyeOpen *= blink;
@@ -796,24 +836,44 @@ export class CatSim {
     const g = this.gait;
     let scap = 0.3;
     if (gaitActive) {
-      const reach = (g.stride * g.duty) / 2;
+      const foreReach = Math.min(28, (g.stride * g.duty) / 2);
+      // Hind legs have a slightly more compact horizontal reach around the hip so the femur+tibia never over-extend into a straight stick
+      const hindReach = Math.min(22, foreReach * 0.8);
       for (let i = 0; i < 4; i++) {
         const hind = isHind(i);
-        const anchor = hind ? b.hip.x + (i === 0 ? 4 : -2) : b.sh.x + (i === NF ? 4 : 9);
+        const reach = hind ? hindReach : foreReach;
+        const anchor = hind ? b.hip.x + (i === 0 ? 1.5 : -2.5) : b.sh.x + (i === NF ? 4 : 9);
         const p = wrap01(this.phase + g.offsets[i]);
         const target: FootPose = { x: 0, y: DIM.pawY, ang: 0, curl: 0.04, planted: true };
         if (p < g.duty) {
+          // Stance phase: paw sweeps backward relative to body from front touchdown (s=0) to rear push-off (s=1)
           const s = p / g.duty;
           target.x = anchor + reach * (1 - 2 * s);
-          target.ang = hind ? lerp(0.25, 0.7, s * s) : lerp(0.32, 0.0, s) - 0.35 * smoothstep((s - 0.8) / 0.2);
+          if (hind) {
+            // At touchdown (s=0, paw forward under belly) metatarsus tilts forward (~0.52 rad) so the hock stays well behind the ball;
+            // at push-off (s=1, paw behind hip) metatarsus is near-vertical (~0.18 rad) so the hock doesn't shoot too far back.
+            // This keeps the hock in a natural range beneath the hip and preserves the feline Z-shape (knee forward, hock back).
+            target.ang = lerp(0.52, 0.18, easeInOut(s));
+          } else {
+            target.ang = lerp(0.32, 0.0, s) - 0.35 * smoothstep((s - 0.8) / 0.2);
+          }
           if (i === NF) scap = bump(s);
         } else {
+          // Swing phase: paw lifts off at rear (s=0), folds hock/wrist cleanly, and reaches forward to touchdown (s=1)
           const s = (p - g.duty) / (1 - g.duty);
-          const lift = Math.pow(bump(s), 0.7);
+          const lift = Math.pow(bump(s), 0.72);
           target.x = anchor - reach + 2 * reach * easeInOut(s);
           target.y = DIM.pawY - g.lift * lift;
-          target.ang = hind ? 0.7 + 0.55 * lift : -1.1 * lift + 0.3 * smoothstep((s - 0.7) / 0.3);
-          target.curl = 0.9 * lift;
+          if (hind) {
+            // Smoothly transition from push-off angle (0.18) back to touchdown angle (0.52),
+            // folding the paw slightly backward during mid-swing lift.
+            const baseAng = lerp(0.18, 0.52, easeInOut(s));
+            target.ang = baseAng - 0.28 * lift;
+            target.curl = 0.55 * lift;
+          } else {
+            target.ang = -1.05 * lift + 0.3 * smoothstep((s - 0.7) / 0.3);
+            target.curl = 0.85 * lift;
+          }
           target.planted = false;
         }
         const fs = this.feet[i];
@@ -869,8 +929,8 @@ export class CatSim {
           const e = easeInOut(s);
           fs.x = lerp(st.from.x, t.x, e);
           fs.y = lerp(st.from.y, t.y, e) - st.lift * bump(s);
-          fs.ang = lerp(st.fromAng, t.ang, e) + (isHind(i) ? 0.5 : -0.9) * bump(s) * (st.lift > 0 ? 1 : 0);
-          fs.curl = lerp(st.fromCurl, t.curl, e) + 0.7 * bump(s) * (st.lift > 0 ? 1 : 0);
+          fs.ang = lerp(st.fromAng, t.ang, e) + (isHind(i) ? -0.32 : -0.85) * bump(s) * (st.lift > 0 ? 1 : 0);
+          fs.curl = lerp(st.fromCurl, t.curl, e) + 0.65 * bump(s) * (st.lift > 0 ? 1 : 0);
           if (s >= 1) {
             fs.step = null;
             fs.planted = true;
@@ -938,14 +998,32 @@ export class CatSim {
     // ── Build frame ──
     const hind: HindLeg[] = [];
     const fore: ForeLeg[] = [];
+    const inSitOrLoaf =
+      !gaitActive &&
+      !airborne &&
+      (this.posture === 'sit' || this.posture === 'loaf' || this.posture === 'sleep');
     for (const i of [0, 2]) {
       const fs = this.feet[i];
       const ball = v(fs.x, fs.y);
       const md = v(Math.sin(fs.ang), Math.cos(fs.ang));
       const hockT = sub(ball, mul(md, DIM.meta));
+      // When standing, walking, trotting or running:
+      // 1) Never let the hock cross in front of the hip/knee (`hockT.x <= out.hip.x - 4.5`)
+      // 2) Keep the hip-to-hock distance <= 90% of (femur + tibia) so the knee ALWAYS has a visible forward bend (feline Z-leg)
+      if (!inSitOrLoaf && !airborne) {
+        hockT.x = Math.min(hockT.x, out.hip.x - 4.5);
+        hockT.y = Math.min(hockT.y, ball.y - 9.5);
+        const maxHockDist = (DIM.femur + DIM.tibia) * 0.9;
+        const dh = dist(out.hip, hockT);
+        if (dh > maxHockDist) {
+          const dir = mul(sub(hockT, out.hip), maxHockDist / dh);
+          hockT.x = out.hip.x + dir.x;
+          hockT.y = out.hip.y + dir.y;
+        }
+      }
       const ik = solveIK2(out.hip, hockT, DIM.femur, DIM.tibia, -1);
       const hock = ik.end;
-      const ball2 = add(hock, mul(md, DIM.meta));
+      const ball2 = inSitOrLoaf ? add(hock, mul(md, DIM.meta)) : ball;
       hind.push({ root: out.hip, knee: ik.joint, hock, ball: ball2, toe: add(ball2, fromAngle(fs.curl, DIM.hindToe)) });
     }
     for (const i of [NF, FF]) {

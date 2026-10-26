@@ -115,11 +115,11 @@ export interface GaitDef {
 }
 
 /** Lateral-sequence walk: LH → LF → RH → RF. */
-export const WALK: GaitDef = { offsets: [0, 0.25, 0.5, 0.75], duty: 0.62, stride: 82, lift: 8 };
+export const WALK: GaitDef = { offsets: [0, 0.25, 0.5, 0.75], duty: 0.62, stride: 76, lift: 8.5 };
 /** Diagonal trot. */
-export const TROT: GaitDef = { offsets: [0, 0.5, 0.5, 1.0], duty: 0.42, stride: 120, lift: 11 };
+export const TROT: GaitDef = { offsets: [0, 0.5, 0.5, 1.0], duty: 0.46, stride: 112, lift: 11 };
 /** Simplified rotary gallop (hind pair, then fore pair). */
-export const DASH: GaitDef = { offsets: [0, 0.52, 0.1, 0.62], duty: 0.3, stride: 200, lift: 14 };
+export const DASH: GaitDef = { offsets: [0, 0.52, 0.12, 0.64], duty: 0.36, stride: 168, lift: 13.5 };
 
 export const GAIT_SPEED = { walk: 120, trot: 280, dash: 560 };
 

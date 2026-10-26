@@ -440,12 +440,12 @@
 /* =====================================================================
    Stealth Cat Side Silhouette — Outer Rim Light on Dark Surfaces
 ===================================================================== */
-.cat-silhouette-root[data-surface="dark"] .cat-unified-silhouette {
-  filter:
-    drop-shadow(0 -1px 0 rgba(212, 240, 20, 0.7))
-    drop-shadow(1px 0 0 rgba(212, 240, 20, 0.5))
-    drop-shadow(-1px 0 0 rgba(212, 240, 20, 0.5))
-    drop-shadow(0 1px 0 rgba(212, 240, 20, 0.35));
+.cat-silhouette-root .cat-rim-layer {
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+.cat-silhouette-root[data-surface="dark"] .cat-rim-layer {
+  opacity: 1;
 }
 
 /* Accessibility: Strict Prefers Reduced Motion */

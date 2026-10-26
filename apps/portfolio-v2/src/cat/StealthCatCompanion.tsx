@@ -19,8 +19,20 @@ export const StealthCatCompanion: React.FC = () => {
   const [hovered, setHovered] = useState(false);
 
   const rigRef = useRef<StealthCatSideRigHandle | null>(null);
-  const hitboxRef = useRef<HTMLDivElement | null>(null);
+  const overlayRef = useRef<HTMLDivElement | null>(null);
+  const pillAnchorRef = useRef<HTMLDivElement | null>(null);
   const brainRef = useRef<CatBrain | null>(null);
+  const prevModeRef = useRef<string>('docked');
+  const hoverTimeoutRef = useRef<number>(0);
+
+  const handleCatHover = (isHover: boolean) => {
+    window.clearTimeout(hoverTimeoutRef.current);
+    if (isHover) {
+      setHovered(true);
+    } else {
+      hoverTimeoutRef.current = window.setTimeout(() => setHovered(false), 320);
+    }
+  };
 
   // Evaluate desktop + pointer:fine + no reduced motion
   useEffect(() => {
@@ -64,11 +76,11 @@ export const StealthCatCompanion: React.FC = () => {
       const curMode = catStore.getState().mode;
 
       // Activate as soon as the two Hero CTA buttons pass behind the top bar (<= 48px)
-      if (curMode === 'docked' && ctaVisibleBottom <= 48) {
+      if ((curMode === 'docked' || curMode === 'exiting') && ctaVisibleBottom <= 48) {
         catStore.setMode('roaming');
-      } else if (curMode !== 'docked' && ctaVisibleBottom > 76) {
-        // User scrolled back up so the Hero CTA buttons are visible again -> dock companion
-        catStore.setMode('docked');
+      } else if (curMode === 'roaming' && ctaVisibleBottom > 76) {
+        // User scrolled back up so the Hero CTA buttons are visible again -> exit off lateral edge then dock
+        catStore.setMode('exiting');
       }
     };
 
@@ -90,9 +102,18 @@ export const StealthCatCompanion: React.FC = () => {
     }
     const brain = brainRef.current;
 
-    if (mode === 'roaming') {
+    // Only trigger lateral entry when transitioning from 'docked'/'exiting' into 'roaming',
+    // NOT when unpausing from a project modal.
+    if (mode === 'roaming' && prevModeRef.current !== 'roaming') {
       brain.enterFromHero(reg, window.scrollY);
+    } else if (mode === 'exiting' && prevModeRef.current !== 'exiting') {
+      brain.exitToHero(reg, window.scrollY, () => {
+        if (catStore.getState().mode === 'exiting') {
+          catStore.setMode('docked');
+        }
+      });
     }
+    prevModeRef.current = mode;
 
     // Track mouse in document space for gaze & card hover
     const onMouseMove = (e: MouseEvent) => {
@@ -116,12 +137,22 @@ export const StealthCatCompanion: React.FC = () => {
       if (document.visibilityState === 'visible') {
         const dt = Math.min(0.05, (now - last) / 1000);
         last = now;
-        brain.update(dt, regRef.current, window.scrollY);
+        if (mode === 'exiting') {
+          brain.sim.update(dt);
+        } else {
+          brain.update(dt, regRef.current, window.scrollY);
+        }
         const f = brain.sim.frame;
         rigRef.current?.renderFrame(f, { darkSurface: brain.darkSurface });
 
-        if (hitboxRef.current) {
-          hitboxRef.current.style.transform = `translate3d(${Math.round(f.x - 58)}px, ${Math.round(f.y - 72)}px, 0)`;
+        if (overlayRef.current) {
+          const dh = `${regRef.current.docHeight}px`;
+          if (overlayRef.current.style.height !== dh) {
+            overlayRef.current.style.height = dh;
+          }
+        }
+        if (pillAnchorRef.current) {
+          pillAnchorRef.current.style.transform = `translate3d(${Math.round(f.x - 36)}px, ${Math.round(f.y - 94)}px, 0)`;
         }
       } else {
         last = now;
@@ -136,39 +167,47 @@ export const StealthCatCompanion: React.FC = () => {
     };
   }, [active, mode, paused, regRef]);
 
+  useEffect(() => {
+    if (mode === 'docked') {
+      prevModeRef.current = 'docked';
+    }
+  }, [mode]);
+
   if (!active || mode === 'docked' || paused || typeof document === 'undefined') {
     return null;
   }
 
   return createPortal(
     <div
-      aria-hidden="true"
+      ref={overlayRef}
       data-testid="stealth-cat-companion"
       className="pointer-events-none absolute top-0 left-0 w-full z-40 overflow-hidden"
       style={{ height: `${regRef.current.docHeight}px` }}
     >
-      <StealthCatSideRig ref={rigRef} className="w-full h-full overflow-visible" />
+      <StealthCatSideRig
+        ref={rigRef}
+        className="w-full h-full overflow-visible"
+        onCatClick={() => brainRef.current?.handleCatClick()}
+        onCatHoverChange={handleCatHover}
+      />
 
-      {/* Interactive click/hover zone & dismiss button */}
+      {/* Accessible dismiss pill anchored above the cat (never blocks underlying page buttons) */}
       <div
-        ref={hitboxRef}
-        data-testid="companion-cat-hitbox"
-        onMouseEnter={() => {
-          setHovered(true);
-        }}
-        onMouseLeave={() => setHovered(false)}
-        onClick={() => brainRef.current?.handleCatClick()}
-        className="pointer-events-auto absolute top-0 left-0 w-[116px] h-[76px] cursor-pointer group select-none"
+        ref={pillAnchorRef}
+        onMouseEnter={() => handleCatHover(true)}
+        onMouseLeave={() => handleCatHover(false)}
+        className="pointer-events-none absolute top-0 left-0 select-none"
       >
         <button
           type="button"
+          aria-label="Ocultar gatito acompañante"
           title="Ocultar gatito acompañante"
           onClick={(e) => {
             e.stopPropagation();
             catStore.setDismissed(true);
           }}
-          className={`absolute -top-6 right-0 px-2 py-0.5 rounded-full text-[10px] font-bold bg-black/80 text-[#D4F014] border border-[#D4F014]/40 shadow transition-opacity duration-200 cursor-pointer ${
-            hovered ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          className={`px-2 py-0.5 rounded-full text-[10px] font-bold bg-black/80 text-[#D4F014] border border-[#D4F014]/40 shadow transition-opacity duration-200 cursor-pointer focus:opacity-100 focus:pointer-events-auto ${
+            hovered ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
           }`}
         >
           💤 Descansar

@@ -34,8 +34,11 @@ export class CatBrain {
 
   private decisionCooldown = 0;
   private idleTimer = 0;
-  private nextIdleActionIn = 0.9;
+  private perchElapsed = 0;
+  private nextIdleActionIn = 1.25;
   private actionCycleIndex = 0;
+  private consecutiveActions = 0;
+  private lastAction: ActionName | null = null;
   private stepVisitedIds = new Set<string>();
 
   private isClickBusy = false;
@@ -116,6 +119,39 @@ export class CatBrain {
   }
 
   /**
+   * When the user scrolls back up so the Hero CTA buttons are visible again,
+   * leap smoothly off the nearest lateral edge of the screen before docking.
+   */
+  exitToHero(reg: LedgeRegistry, scrollY: number, onComplete: () => void) {
+    this.isClickBusy = false;
+    this.catchUpState = null;
+    this.currentLedge = null;
+    this.targetLedge = null;
+
+    // If already off-screen vertically or laterally, dock immediately
+    if (
+      this.sim.x < -60 ||
+      this.sim.x > reg.viewportW + 60 ||
+      this.sim.y < scrollY - 80 ||
+      this.sim.y > scrollY + reg.viewportH + 80
+    ) {
+      onComplete();
+      return;
+    }
+
+    const toLeft = this.sim.x <= reg.viewportW * 0.52;
+    const exitX = toLeft ? -110 : reg.viewportW + 110;
+    const exitY = Math.max(scrollY + 60, this.sim.y - 65);
+    this.sim.jumpTo(exitX, exitY, {
+      wiggle: false,
+      fastPrep: true,
+      then: 'crouch',
+      onLand: () => {
+        onComplete();
+      },
+    });
+  }
+  /**
    * Launches the cat from completely outside the left or right lateral edge of the screen
    * onto `target`, so it never appears out of thin air / blank white pixels.
    */
@@ -157,7 +193,9 @@ export class CatBrain {
         this.targetLedge = null;
         this.darkSurface = target.surface === 'dark';
         this.idleTimer = 0;
-        this.nextIdleActionIn = 0.8 + Math.random() * 0.6;
+        this.perchElapsed = 0;
+        this.consecutiveActions = 0;
+        this.nextIdleActionIn = 1.2 + Math.random() * 0.8;
         this.triggerSectionArrivalBehavior(target);
       },
     });
@@ -226,9 +264,11 @@ export class CatBrain {
       this.targetLedge = null;
       this.darkSurface = target.surface === 'dark';
       this.idleTimer = 0;
-      this.nextIdleActionIn = 0.85 + Math.random() * 0.75;
+      this.perchElapsed = 0;
+      this.consecutiveActions = 0;
+      this.nextIdleActionIn = 1.25 + Math.random() * 0.9;
       if (isIntermediateStep) {
-        this.decisionCooldown = 0.06;
+        this.decisionCooldown = 0.14;
       } else {
         this.triggerSectionArrivalBehavior(target);
       }
@@ -282,8 +322,9 @@ export class CatBrain {
   private triggerSectionArrivalBehavior(ledge: CatLedge) {
     if (this.isClickBusy) return;
     this.actionCycleIndex++;
-    // Frequently look toward the viewer (`lookFront`) when stopping on a ledge to "read"
-    if (this.actionCycleIndex % 2 === 1) {
+    // Look toward the viewer (`lookFront`) on every third ledge arrival so it feels special
+    if (this.actionCycleIndex % 3 === 1) {
+      this.lastAction = 'lookFront';
       this.sim.play('lookFront', () => {
         if (ledge.behavior === 'stalk') this.sim.setPosture('crouch');
         else this.sim.setPosture('sit');
@@ -293,22 +334,28 @@ export class CatBrain {
 
     switch (ledge.behavior) {
       case 'sniff':
+        this.lastAction = 'sniff';
         this.sim.play('sniff', () => this.sim.setPosture('sit'));
         break;
       case 'stalk':
         this.sim.setPosture('crouch');
+        this.lastAction = 'wiggle';
         this.sim.play('wiggle');
         break;
       case 'curious':
-        this.sim.play('lookFront');
+        this.lastAction = 'lookAround';
+        this.sim.play('lookAround');
         break;
       case 'stepping':
+        this.lastAction = 'tailFlick';
         this.sim.play('tailFlick');
         break;
       case 'sleep':
+        this.lastAction = 'yawn';
         this.sim.play('yawn', () => this.sim.setPosture('loaf'));
         break;
       case 'alert':
+        this.lastAction = 'lookAround';
         this.sim.play('lookAround');
         break;
     }
@@ -410,23 +457,35 @@ export class CatBrain {
     }
 
     // 4. Normal scroll: continuously hop to the best ledge in the viewport
+    //    (380ms decision cooldown + hysteresis prevents jitter on small scroll ticks)
     if (this.decisionCooldown <= 0 && !this.sim.isJumping) {
       const best = this.pickBestLedge(reg, scrollY);
       if (best && (!this.currentLedge || best.id !== this.currentLedge.id)) {
         this.sim.stopMoving();
-        this.decisionCooldown = 0.18;
+        this.decisionCooldown = 0.38;
         this.stepTowardLedge(reg, best);
       }
     }
 
-    // 5. Autonomous idle behaviors while perched (short intervals between animations)
+    // 5. Autonomous idle behaviors while perched (weighted, non-repeating, with calm rest pauses & loaf)
     if (this.sim.isIdle && !this.isClickBusy && this.currentLedge) {
       this.idleTimer += dt;
+      this.perchElapsed += dt;
+
+      // Settle into a calm loaf after ~20s perched on the same ledge
+      if (
+        this.perchElapsed > 20 &&
+        this.sim.posture !== 'loaf' &&
+        this.sim.posture !== 'sleep' &&
+        this.currentLedge.behavior !== 'stalk'
+      ) {
+        this.sim.setPosture('loaf');
+      }
 
       // In Process ('stepping') section, occasionally hop to an adjacent process step ledge
       if (
         this.currentLedge.behavior === 'stepping' &&
-        this.idleTimer > 2.2 &&
+        this.idleTimer > 2.4 &&
         this.decisionCooldown <= 0
       ) {
         const siblings = reg.ledges.filter(
@@ -440,7 +499,7 @@ export class CatBrain {
         if (nextStep) {
           this.stepVisitedIds.add(nextStep.id);
           if (this.stepVisitedIds.size > 4) this.stepVisitedIds.clear();
-          this.decisionCooldown = 2.2;
+          this.decisionCooldown = 2.4;
           this.idleTimer = 0;
           this.moveToLedge(nextStep);
           this.sim.update(dt);
@@ -449,26 +508,52 @@ export class CatBrain {
       }
 
       if (this.idleTimer >= this.nextIdleActionIn) {
-        this.nextIdleActionIn = this.idleTimer + 0.95 + Math.random() * 0.85;
-        const pool: ActionName[] =
-          this.currentLedge.behavior === 'stalk'
-            ? ['lookFront', 'swipe', 'wiggle', 'tailFlick', 'lookAround', 'lookFront', 'groom']
-            : [
-                'lookFront',
-                'groom',
-                'yawn',
-                'lookAround',
-                'tailFlick',
-                'sniff',
-                'swipe',
-                'wiggle',
-                'lookFront',
-              ];
-        const pick = pool[Math.floor(Math.random() * pool.length)];
+        this.consecutiveActions += 1;
 
-        // 18% chance to take a short stroll along the current ledge if wide enough
+        // Every 4 consecutive behaviors, take a calm 3.2–4.8s breathing/ear-twitch pause
+        if (this.consecutiveActions >= 4) {
+          this.consecutiveActions = 0;
+          this.nextIdleActionIn = this.idleTimer + 3.2 + Math.random() * 1.6;
+        } else {
+          this.nextIdleActionIn = this.idleTimer + 1.35 + Math.random() * 1.15;
+        }
+
+        const weighted: [ActionName, number][] =
+          this.currentLedge.behavior === 'stalk'
+            ? [
+                ['lookFront', 2.2],
+                ['tailFlick', 2.4],
+                ['lookAround', 2.0],
+                ['swipe', 1.7],
+                ['wiggle', 1.6],
+                ['groom', 1.2],
+              ]
+            : [
+                ['lookFront', 2.2],
+                ['tailFlick', 2.3],
+                ['lookAround', 2.0],
+                ['groom', 1.8],
+                ['sniff', 1.5],
+                ['yawn', 1.2],
+                ['swipe', 1.1],
+                ['wiggle', 1.0],
+              ];
+
+        const filtered = weighted.filter(([name]) => name !== this.lastAction);
+        const totalW = filtered.reduce((acc, [, w]) => acc + w, 0);
+        let r = Math.random() * totalW;
+        let pick: ActionName = filtered[0][0];
+        for (const [name, w] of filtered) {
+          r -= w;
+          if (r <= 0) {
+            pick = name;
+            break;
+          }
+        }
+
+        // 16% chance to take a short stroll along the current ledge if wide enough
         const span = this.currentLedge.xEnd - this.currentLedge.xStart;
-        if (span > 220 && Math.random() < 0.18) {
+        if (span > 220 && Math.random() < 0.16 && this.sim.posture !== 'loaf') {
           const nx =
             this.currentLedge.xStart + 44 + Math.random() * Math.max(20, span - 88);
           if (Math.abs(nx - this.sim.x) > 55) {
@@ -477,17 +562,20 @@ export class CatBrain {
               stealth: this.currentLedge.behavior === 'stalk',
               onArrive: () => {
                 this.sim.setPosture('sit');
+                this.lastAction = 'lookFront';
                 this.sim.play('lookFront');
               },
             });
           } else {
+            this.lastAction = pick;
             if (!this.sim.play(pick)) {
-              this.nextIdleActionIn = this.idleTimer + 0.25;
+              this.nextIdleActionIn = this.idleTimer + 0.35;
             }
           }
         } else {
+          this.lastAction = pick;
           if (!this.sim.play(pick)) {
-            this.nextIdleActionIn = this.idleTimer + 0.25;
+            this.nextIdleActionIn = this.idleTimer + 0.35;
           }
         }
       }
